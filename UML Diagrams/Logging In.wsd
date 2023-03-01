@@ -1,0 +1,14 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Logging in User
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+database UserManagementService as db
+
+User->gui++: Enters login info
+gui->db++:LoginUser(username, password)
+gui<-db++:User is logged in
+gui->User++:Display mode selection screen
+@enduml
