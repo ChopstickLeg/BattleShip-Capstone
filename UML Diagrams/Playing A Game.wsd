@@ -1,0 +1,13 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Playing a Game
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Displays gameplay screen
+loop While there are ships still standing on either side
+    User->gui++:Clicks on desired space(s), and clicks 'Fire'
+    gui->User:FireShot((int, int), FiredShotsP1, FiredShotsP2, ShipLayoutP1, ShipLayoutP2, IsPlayer1Turn)
+    end
+gui->gui:EndGame()

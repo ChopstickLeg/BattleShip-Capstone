@@ -1,0 +1,10 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Rematch
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Displays End of Game screen
+User->gui:Clicks 'Rematch' button
+gui->User:Displays rule selection screen with both players still logged in

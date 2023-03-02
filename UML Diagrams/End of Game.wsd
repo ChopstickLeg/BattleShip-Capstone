@@ -1,0 +1,10 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title End of Game
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+User->gui:Fires on last ship
+gui->gui:EndGame()
+gui->User:Displays End of Game screen

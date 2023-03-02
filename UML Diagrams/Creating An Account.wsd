@@ -1,15 +1,17 @@
 @startuml
 'Author: Hayden Carpenter
 'Last Edit: 2023-01-03
-title Logging in User
+title Creating an Account
 header Last edit: 2023-01-03
 actor User
 participant BattleShipApp as gui
 database UserManagementService as db
+gui->User:Display Login Screen
 User->gui++:Clicks "Create Account"
-gui->User++:Displays Account creation screen
-User->gui++:Enters requested login info
+gui->User:Displays Account creation screen
+User->gui:Enters requested login info
 gui->db++:CreateUser(username, password)
-db->gui++:User has been created
-gui->User++:Displays login screen
+db->gui:User has been created
+db--
+gui->User--:Displays login screen
 @enduml

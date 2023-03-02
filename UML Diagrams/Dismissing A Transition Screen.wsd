@@ -1,0 +1,11 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Dismissing a Transition Screen
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->gui++:EndTurn()
+gui->User:Displays transition screen
+User->gui:Presses Spacebar
+gui->User:Display's next player's gameplay screen

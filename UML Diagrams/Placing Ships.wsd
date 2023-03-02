@@ -1,0 +1,15 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Placing Ships
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Displays Ship Placement screen
+loop While ships are still avaliable in sidebar
+    User->gui++:Clicks and drags their ships to the desired location
+end
+gui->gui:Enables 'Continue' button
+gui->gui:setShipLayout()
+User->gui:Clicks 'Continue' button
+gui->User:Displays gameplay or transition screen

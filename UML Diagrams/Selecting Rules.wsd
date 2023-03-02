@@ -1,0 +1,19 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Selecting Rules
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Display Rule Selection Screen
+User->gui++:Selects board size
+gui->gui++:Disables/limits ship options based on board size
+User->gui:Selects number of ships
+gui->gui:SetShipList(ListOfShips)
+gui--
+User->gui++:Selects salvo mode
+gui->gui--:isSalvoMode = T/F
+User->gui++:Selects chain hits
+gui->gui--:isChainHits = T/F
+User->gui:Hits next button
+gui->User:Displays ship placement screen

@@ -1,0 +1,11 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Playing Against Computer
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Display Mode Selection Screen
+User->gui++:Selects Player v Computer
+gui->gui:SetP2(Player)
+gui->User:Displays rule selection screen

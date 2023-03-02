@@ -1,0 +1,17 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Saving a Game
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Displays gameplay screen
+loop While the user wishes to play
+    User->gui++:Clicks on desired space(s), and clicks 'Fire'
+    gui->User:FireShot((int, int), FiredShotsP1, FiredShotsP2, ShipLayoutP1, ShipLayoutP2, IsPlayer1Turn)
+    end
+User->gui:Clicks Pause button
+gui->User:Displays pause menu
+User->gui:Clicks Save and Exit
+gui->gui:SaveGame()
+gui->User:Exits application

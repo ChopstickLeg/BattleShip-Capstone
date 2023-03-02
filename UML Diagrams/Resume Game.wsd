@@ -1,0 +1,14 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Resume Game
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Displays mode selection screen with 'Resume Game' enabled
+User->gui++:Clicks on 'Resume Game'
+gui->User:Displays all saved games associated with the logged in user
+User->gui:Clicks on the desired game
+gui->User:Displays confirmation dialogue
+User->gui:Clicks 'Confirm'
+gui->User:Displays gameplay screen starting where the saved game left off

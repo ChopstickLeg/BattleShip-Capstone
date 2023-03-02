@@ -1,0 +1,11 @@
+@startuml
+'Author: Hayden Carpenter
+'Last Edit: 2023-01-03
+title Playing Against Human
+header Last edit: 2023-01-03
+actor User
+participant BattleShipApp as gui
+gui->User:Display Mode Selection Screen
+User->gui++:Clicks Player v Player option
+gui->gui:SetP2(Player)
+gui->User:Displays login screen for Player 2

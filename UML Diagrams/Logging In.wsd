@@ -6,9 +6,11 @@ header Last edit: 2023-01-03
 actor User
 participant BattleShipApp as gui
 database UserManagementService as db
-
+gui->User:Display Login Screen
 User->gui++: Enters login info
 gui->db++:LoginUser(username, password)
-gui<-db++:User is logged in
-gui->User++:Display mode selection screen
+gui<-db--:User is logged in
+gui->gui:SetP1(Player)
+gui->User:Display mode selection screen
+gui--
 @enduml
