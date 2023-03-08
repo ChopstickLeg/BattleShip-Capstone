@@ -1,0 +1,2 @@
+pygame v2.2.0
+pygame_menu v4.3.8
