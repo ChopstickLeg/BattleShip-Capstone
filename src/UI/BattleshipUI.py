@@ -31,7 +31,7 @@ class BattleshipUI(object):
         self.mode_selection_screen = pygame_menu.Menu("Select A Mode", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
         self.mode_selection_screen.add.button("Player v Player", self.create_rule_selection_screen)
         self.mode_selection_screen.add.button("Player v Computer", self.create_rule_selection_screen)
-        self.mode_selection_screen.add.button("Resume Game")
+        self.mode_selection_screen.add.button("Resume Game", self.create_saved_games_screen)
         self.mode_selection_screen.add.button("Quit Application", pygame_menu.events.EXIT)
         self.on_resize(self.mode_selection_screen)
         self.mode_selection_screen.enable()
@@ -77,7 +77,7 @@ class BattleshipUI(object):
         for n in range(10):
             self.table2.add_row(["\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t"])
             self.table3.add_row(["\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t", "\t"])
-        self.gameplay_screen.add.button("Next Screen")
+        self.gameplay_screen.add.button("Next Screen", self.create_pause_screen)
         self.on_resize(self.gameplay_screen)
         self.gameplay_screen.enable()
         self.run_screen(self.gameplay_screen)
