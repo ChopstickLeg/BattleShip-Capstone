@@ -1,6 +1,9 @@
 import pygame
 import pygame_menu
 
+from Core.Data import *
+from Core.Services import *
+
 class BattleshipUI(object):
     def __init__(self) -> None:
         pygame.init()
