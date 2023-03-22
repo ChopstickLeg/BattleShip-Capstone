@@ -2,18 +2,21 @@ import pygame
 import pygame_menu
 from Core.Services import AccountManagementServiceInterface
 from Core.Services.AccountManagementService import AccountManagementService
+from tkinter import messagebox
 
 class BattleshipUI(object):
     def __init__(self) -> None:
         pygame.init()
         self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService()}
         self.surface = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
+        self.accountService:AccountManagementServiceInterface = self.serviceCollection[AccountManagementServiceInterface]
 
     def create_login_screen(self):
         self.loginScreen = pygame_menu.Menu("Login",100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.loginScreen.add.text_input("Username: ")
-        self.loginScreen.add.text_input("Password: ")
-        self.loginScreen.add.button("Next Screen", self.create_create_account_screen)
+        self.login_user_input = self.loginScreen.add.text_input("Username: ")
+        self.login_pass_input = self.loginScreen.add.text_input("Password: ")
+        self.loginScreen.add.button("Create Account", self.create_create_account_screen)
+        self.loginScreen.add.button("Login", self.login_pressed)
         self.loginScreen.add.button("Exit", pygame_menu.events.EXIT)
         self.on_resize(self.loginScreen)
         self.loginScreen.enable()
@@ -21,10 +24,10 @@ class BattleshipUI(object):
 
     def create_create_account_screen(self):
         self.create_account_screen = pygame_menu.Menu("Create Account", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.create_account_screen.add.text_input("Username: ")
-        self.create_account_screen.add.text_input("Password: ")
-        self.create_account_screen.add.text_input("Confirm Password: ")
-        self.create_account_screen.add.button("Next Screen", self.create_mode_selection_screen)
+        self.create_user_input = self.create_account_screen.add.text_input("Username: ")
+        self.create_pass_input = self.create_account_screen.add.text_input("Password: ")
+        self.create_pass_confirm_input = self.create_account_screen.add.text_input("Confirm Password: ")
+        self.create_account_screen.add.button("Create Account", self.create_account_pressed)
         self.create_account_screen.add.button("Exit", pygame_menu.events.EXIT)
         self.on_resize(self.create_account_screen)
         self.create_account_screen.enable()
@@ -103,6 +106,19 @@ class BattleshipUI(object):
         self.on_resize(self.endgame_screen)
         self.endgame_screen.enable()
         self.run_screen(self.endgame_screen)
+
+    def login_pressed(self):
+        self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+        self.create_mode_selection_screen()
+
+    def create_account_pressed(self):
+        if self.create_pass_confirm_input.get_value() != self.create_pass_input.get_value():
+            self.create_pass_input.clear()
+            self.create_pass_confirm_input.clear()
+            messagebox.showerror(title = "Password Error", message = "Passwords do not match")
+            self.run_screen()
+        self.accountService.createAccount(self.create_user_input.get_value(), self.create_pass_input.get_value())
+        self.create_login_screen()
 
     def run_screen(self, menu):
         while True:
