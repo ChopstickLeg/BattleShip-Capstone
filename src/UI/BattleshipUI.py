@@ -1,12 +1,12 @@
 import pygame
 import pygame_menu
-
-from Core.Data import *
-from Core.Services import *
+from Core.Services import AccountManagementServiceInterface
+from Core.Services.AccountManagementService import AccountManagementService
 
 class BattleshipUI(object):
     def __init__(self) -> None:
         pygame.init()
+        self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService()}
         self.surface = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
 
     def create_login_screen(self):
