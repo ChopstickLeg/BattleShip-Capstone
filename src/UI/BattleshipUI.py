@@ -118,7 +118,11 @@ class BattleshipUI(object):
 
     def login_pressed(self):
         if self.logged_in1 == None:
-            self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+            try:
+                self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+            except IndexError:
+                messagebox.showerror(title="Account not found", message="An account with that user information could not be found, please try again")
+                self.run_screen(self.loginScreen)
             self.create_mode_selection_screen()
         elif self.logged_in2 == None:
             if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
