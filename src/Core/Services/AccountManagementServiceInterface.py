@@ -7,7 +7,7 @@ class AccountManagementServiceInterface(ABC):
     def createAccount(self, user, passwd, conn):
         raise NotImplementedError()
     @abstractmethod
-    def getaccount(self, id, conn):
+    def getAccount(self, id, conn):
         raise NotImplementedError()
     @abstractmethod
     def loginAccount(self, user, passwd, conn):

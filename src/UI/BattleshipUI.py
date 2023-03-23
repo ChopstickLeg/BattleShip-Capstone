@@ -3,6 +3,7 @@ import pygame_menu
 from Core.Services import AccountManagementServiceInterface
 from Core.Services.AccountManagementService import AccountManagementService
 from tkinter import messagebox
+import sqlite3
 
 class BattleshipUI(object):
     def __init__(self) -> None:
@@ -10,6 +11,8 @@ class BattleshipUI(object):
         self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService()}
         self.surface = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
         self.accountService:AccountManagementServiceInterface = self.serviceCollection[AccountManagementServiceInterface]
+        self.logged_in1 = None
+        self.logged_in2 = None
 
     def create_login_screen(self):
         self.loginScreen = pygame_menu.Menu("Login",100, 200, theme=pygame_menu.themes.THEME_BLUE)
@@ -28,6 +31,7 @@ class BattleshipUI(object):
         self.create_pass_input = self.create_account_screen.add.text_input("Password: ")
         self.create_pass_confirm_input = self.create_account_screen.add.text_input("Confirm Password: ")
         self.create_account_screen.add.button("Create Account", self.create_account_pressed)
+        self.create_account_screen.add.button("Back to Login", self.create_login_screen)
         self.create_account_screen.add.button("Exit", pygame_menu.events.EXIT)
         self.on_resize(self.create_account_screen)
         self.create_account_screen.enable()
@@ -35,7 +39,8 @@ class BattleshipUI(object):
 
     def create_mode_selection_screen(self):
         self.mode_selection_screen = pygame_menu.Menu("Select A Mode", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.mode_selection_screen.add.button("Player v Player", self.create_rule_selection_screen)
+        self.mode_selection_screen.add.label("Logged in as: " + self.logged_in1.user[0][0])
+        self.mode_selection_screen.add.button("Player v Player", self.create_login_screen)
         self.mode_selection_screen.add.button("Player v Computer", self.create_rule_selection_screen)
         self.mode_selection_screen.add.button("Resume Game", self.create_saved_games_screen)
         self.mode_selection_screen.add.button("Quit Application", pygame_menu.events.EXIT)
@@ -53,6 +58,10 @@ class BattleshipUI(object):
     
     def create_rule_selection_screen(self):
         self.rule_selection_screen = pygame_menu.Menu("Select Your Rules", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        if self.logged_in2 != None:
+            self.rule_selection_screen.add.label("Logged in users: " + self.logged_in1.user[0][0] + " " + self.logged_in2.user[0][0])
+        else:
+            self.rule_selection_screen.add.label("Logged in user: " + self.logged_in1.user[0][0])
         self.rule_selection_screen.add.dropselect(title = "Select Board Size", items = ["7 x 7", "8 x 8", "9 x 9", "10 x 10", "11 x 11", "12 x 12", "13 x 13"])
         self.rule_selection_screen.add.dropselect(title = "Select number of 5 length ships", items = ["1", "2", "3"])
         self.rule_selection_screen.add.dropselect(title = "Select number of 4 length ships", items = ["1", "2", "3", "4"])
@@ -108,18 +117,36 @@ class BattleshipUI(object):
         self.run_screen(self.endgame_screen)
 
     def login_pressed(self):
-        self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
-        self.create_mode_selection_screen()
+        if self.logged_in1 == None:
+            self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+            self.create_mode_selection_screen()
+        elif self.logged_in2 == None:
+            if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
+                messagebox.showerror(title="Same user login", message="The same user cannot be logged in twice.")
+                self.login_pass_input.clear()
+                self.login_user_input.clear()
+                self.run_screen(self.loginScreen)
+            self.logged_in2 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+            self.create_rule_selection_screen()
+        else:
+            messagebox.showerror(title= "An error has occurred", message= "I don't know how you tried to login 3 accounts, but good job. Application will exit now")
+            pygame_menu.events.EXIT
+        
 
     def create_account_pressed(self):
         if self.create_pass_confirm_input.get_value() != self.create_pass_input.get_value():
             self.create_pass_input.clear()
             self.create_pass_confirm_input.clear()
             messagebox.showerror(title = "Password Error", message = "Passwords do not match")
-            self.run_screen()
-        self.accountService.createAccount(self.create_user_input.get_value(), self.create_pass_input.get_value())
+            self.run_screen(self.create_account_screen)
+        try:
+            self.accountService.createAccount(self.create_user_input.get_value(), self.create_pass_input.get_value())
+        except sqlite3.IntegrityError:
+            messagebox.showerror(title="Duplicate Username", message="That username is already in use")
+            self.create_user_input.clear()
+            self.run_screen(self.create_account_screen)
         self.create_login_screen()
-
+    
     def run_screen(self, menu):
         while True:
             events = pygame.event.get()
