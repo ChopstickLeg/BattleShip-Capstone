@@ -125,12 +125,16 @@ class BattleshipUI(object):
                 self.run_screen(self.loginScreen)
             self.create_mode_selection_screen()
         elif self.logged_in2 == None:
-            if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
-                messagebox.showerror(title="Same user login", message="The same user cannot be logged in twice.")
-                self.login_pass_input.clear()
-                self.login_user_input.clear()
+            try:
+                if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
+                    messagebox.showerror(title="Same user login", message="The same user cannot be logged in twice.")
+                    self.login_pass_input.clear()
+                    self.login_user_input.clear()
+                    self.run_screen(self.loginScreen)
+                self.logged_in2 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
+            except IndexError:
+                messagebox.showerror(title="Account not found", message="An account with that user information could not be found, please try again")
                 self.run_screen(self.loginScreen)
-            self.logged_in2 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
             self.create_rule_selection_screen()
         else:
             messagebox.showerror(title= "An error has occurred", message= "I don't know how you tried to login 3 accounts, but good job. Application will exit now")
