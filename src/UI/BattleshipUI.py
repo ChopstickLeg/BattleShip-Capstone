@@ -1,5 +1,6 @@
 import pygame
 import pygame_menu
+from .Subsections import LoginScreen
 from Core.Services import AccountManagementServiceInterface
 from Core.Services.AccountManagementService import AccountManagementService
 from tkinter import messagebox
@@ -11,19 +12,7 @@ class BattleshipUI(object):
         self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService()}
         self.surface = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
         self.accountService:AccountManagementServiceInterface = self.serviceCollection[AccountManagementServiceInterface]
-        self.logged_in1 = None
-        self.logged_in2 = None
-
-    def create_login_screen(self):
-        self.loginScreen = pygame_menu.Menu("Login",100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.login_user_input = self.loginScreen.add.text_input("Username: ")
-        self.login_pass_input = self.loginScreen.add.text_input("Password: ")
-        self.loginScreen.add.button("Create Account", self.create_create_account_screen)
-        self.loginScreen.add.button("Login", self.login_pressed)
-        self.loginScreen.add.button("Exit", pygame_menu.events.EXIT)
-        self.on_resize(self.loginScreen)
-        self.loginScreen.enable()
-        self.run_screen(self.loginScreen)
+        LoginScreen.__init__("", self.accountService)
 
     def create_create_account_screen(self):
         self.create_account_screen = pygame_menu.Menu("Create Account", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
@@ -115,30 +104,6 @@ class BattleshipUI(object):
         self.on_resize(self.endgame_screen)
         self.endgame_screen.enable()
         self.run_screen(self.endgame_screen)
-
-    def login_pressed(self):
-        if self.logged_in1 == None:
-            try:
-                self.logged_in1 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
-            except IndexError:
-                messagebox.showerror(title="Account not found", message="An account with that user information could not be found, please try again")
-                self.run_screen(self.loginScreen)
-            self.create_mode_selection_screen()
-        elif self.logged_in2 == None:
-            try:
-                if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
-                    messagebox.showerror(title="Same user login", message="The same user cannot be logged in twice.")
-                    self.login_pass_input.clear()
-                    self.login_user_input.clear()
-                    self.run_screen(self.loginScreen)
-                self.logged_in2 = self.accountService.loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value())
-            except IndexError:
-                messagebox.showerror(title="Account not found", message="An account with that user information could not be found, please try again")
-                self.run_screen(self.loginScreen)
-            self.create_rule_selection_screen()
-        else:
-            messagebox.showerror(title= "An error has occurred", message= "I don't know how you tried to login 3 accounts, but good job. Application will exit now")
-            pygame_menu.events.EXIT
         
 
     def create_account_pressed(self):
@@ -155,21 +120,5 @@ class BattleshipUI(object):
             self.run_screen(self.create_account_screen)
         self.create_login_screen()
     
-    def run_screen(self, menu):
-        while True:
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    break
-                if event.type == pygame.VIDEORESIZE:
-                    self.surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                    self.on_resize(menu)
-            menu.update(events)
-            menu.draw(self.surface)
-            pygame.display.flip()
     
-    def on_resize(self, menu):
-        windowSize = self.surface.get_size()
-        newW, newH = windowSize[0], windowSize[1]
-        menu.resize(newW, newH)
+    

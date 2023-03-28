@@ -6,4 +6,4 @@ class Startup(object):
         self.app = BSUI.BattleshipUI()
 
     def initialize(self):
-        self.app.create_login_screen()
+        self.app.__init__()

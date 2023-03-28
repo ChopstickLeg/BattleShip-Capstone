@@ -8,6 +8,8 @@ class AccountManagementService(AMSI):
         self.conn = sqlite3.connect(r".\BattleshipDB.db")
         self.c = self.conn.cursor()
         self.c.execute("""CREATE TABLE IF NOT EXISTS Accounts (Key INTEGER PRIMARY KEY, Username VARCHAR(256) NOT NULL UNIQUE, Password VARCHAR(256) NOT NULL, GamesPlayed INTEGER NOT NULL, GamesWon INTEGER NOT NULL)""")
+        self.logged_in1 = None
+        self.logged_in2 = None
 
     def createAccount(self, user, passwd):
         newAccount = Account(user, passwd)
@@ -29,8 +31,14 @@ class AccountManagementService(AMSI):
     def loginAccount(self, user, passwd):
         self.c.execute("""SELECT Key FROM Accounts WHERE Username = ? AND Password = ?""", (user, passwd))
         out = self.c.fetchall()
-        return self.getAccount(out[0][0])
+        if self.logged_in1 == None:
+            self.logged_in1 = self.getAccount(out[0][0])
+        elif self.logged_in2 == None:
+            self.logged_in2 = self.getAccount(out[0][0])
 
+    def get_logged_in(self):
+        return self.logged_in1, self.logged_in2
+    
     def recordWin(self, id):
         acct = self.getaccount(id)
         self.c.execute("""UPDATE Accounts SET GamesPlayed = ?, GamesWon = ? WHERE Key = ?""", (acct.gamesPlayed + 1, acct.gamesWon + 1, id))
