@@ -4,9 +4,9 @@ import pygame_menu
 from tkinter import messagebox
 
 class UI_Interface(ABC):
-    @abstractmethod
-    def __init__(self):
-        raise NotImplementedError()
+    def __init__(self, service, surface):
+        self.accountService = service
+        self.surface = surface
     
     def run_screen(self, menu):
         while True:

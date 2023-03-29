@@ -1,10 +1,9 @@
 import pygame
 import pygame_menu
-from .Subsections import LoginScreen
+from .Subsections.AccountScreens import AccountsScreens
 from Core.Services import AccountManagementServiceInterface
 from Core.Services.AccountManagementService import AccountManagementService
 from tkinter import messagebox
-import sqlite3
 
 class BattleshipUI(object):
     def __init__(self) -> None:
@@ -12,7 +11,8 @@ class BattleshipUI(object):
         self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService()}
         self.surface = pygame.display.set_mode((1280, 720), pygame.RESIZABLE)
         self.accountService:AccountManagementServiceInterface = self.serviceCollection[AccountManagementServiceInterface]
-        LoginScreen.__init__("", self.accountService)
+        self.login_screen = AccountsScreens(self.accountService, self.surface)
+        self.login_screen.add_login_elements()
 
     def create_create_account_screen(self):
         self.create_account_screen = pygame_menu.Menu("Create Account", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
@@ -106,19 +106,7 @@ class BattleshipUI(object):
         self.run_screen(self.endgame_screen)
         
 
-    def create_account_pressed(self):
-        if self.create_pass_confirm_input.get_value() != self.create_pass_input.get_value():
-            self.create_pass_input.clear()
-            self.create_pass_confirm_input.clear()
-            messagebox.showerror(title = "Password Error", message = "Passwords do not match")
-            self.run_screen(self.create_account_screen)
-        try:
-            self.accountService.createAccount(self.create_user_input.get_value(), self.create_pass_input.get_value())
-        except sqlite3.IntegrityError:
-            messagebox.showerror(title="Duplicate Username", message="That username is already in use")
-            self.create_user_input.clear()
-            self.run_screen(self.create_account_screen)
-        self.create_login_screen()
+    
     
     
     
