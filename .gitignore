@@ -4,3 +4,14 @@ src/Core/Data/__pycache__/Account.cpython-310.pyc
 src/Core/Services/__pycache__/AccountManagementService.cpython-310.pyc
 src/Core/Services/__pycache__/AccountManagementServiceInterface.cpython-310.pyc
 BattleshipDB.db
+src/UI/Subsections/__pycache__/AccountScreens.cpython-310.pyc
+src/UI/Subsections/__pycache__/BackToLogin.cpython-310.pyc
+src/UI/Subsections/__pycache__/CreateAccountScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/LoginScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/UI_Interface.cpython-310.pyc
+src/UI/Subsections/__pycache__/RuleSelectionScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/SavedGameScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/EndgameScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/GameplayScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/PauseScreen.cpython-310.pyc
+src/UI/Subsections/__pycache__/ShipPlacementScreen.cpython-310.pyc
