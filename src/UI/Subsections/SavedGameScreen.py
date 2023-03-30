@@ -5,8 +5,8 @@ from .UI_Interface import UI_Interface as UII
 from .GameplayScreen import GameplayScreen
 
 class SavedGamesScreen(UII):
-    def __init__(self, service, surface):
-        super().__init__(service, surface)
+    def __init__(self, service, service2, surface):
+        super().__init__(service, service2, surface)
     
     def add_elements(self):
         self.saved_games_screen = pygame_menu.Menu("Select a saved game", 100, 200, theme = pygame_menu.themes.THEME_BLUE)
@@ -17,5 +17,5 @@ class SavedGamesScreen(UII):
         self.run_screen(self.saved_games_screen)
     
     def build_gameplay_screen(self):
-        self.gameplay_screen = GameplayScreen(self.accountService, self.surface)
+        self.gameplay_screen = GameplayScreen(self.accountService, self.boardService, self.surface)
         self.gameplay_screen.add_elements()
