@@ -3,7 +3,6 @@ import pygame_menu
 from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 from .ShipPlacementScreen import ShipPlacementScreen
-import sqlite3
 from Core.Data import globals
 
 class RuleSelectionScreen(UII):
@@ -49,11 +48,15 @@ class RuleSelectionScreen(UII):
             self.salvo_toggle.set_controls(mouse = True, keyboard = True)
     
     def create_board(self):
-        board_size = self.board_size.get_value()
-        ship5 = self.ship5.get_value()
-        ship4 = self.ship4.get_value()
-        ship3 = self.ship3.get_value()
-        ship2 = self.ship2.get_value()
+        try:
+            board_size = self.board_size.get_value()
+            ship5 = self.ship5.get_value()
+            ship4 = self.ship4.get_value()
+            ship3 = self.ship3.get_value()
+            ship2 = self.ship2.get_value()
+        except ValueError:
+            messagebox.showerror(title="Not all fields selected", message="Please select a value from all dropdowns")
+            self.run_screen(self.rule_selection_screen)
         salvo = self.salvo_toggle.get_value()
         chain = self.chain_toggle.get_value()
         ship5 = int(ship5[0])
