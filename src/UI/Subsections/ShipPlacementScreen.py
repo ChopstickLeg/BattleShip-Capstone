@@ -6,8 +6,6 @@ from .GameplayScreen import GameplayScreen
 from Core.Data import globals
 
 class ShipPlacementScreen(UII):
-    def __init__(self, service, service2, surface):
-        super().__init__(service, service2, surface)
     def add_elements(self):
         self.ship_placement_screen = pygame_menu.Menu("Place your ships", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
         self.table1 = self.ship_placement_screen.add.table(border_color = "black")
@@ -19,5 +17,5 @@ class ShipPlacementScreen(UII):
         self.run_screen(self.ship_placement_screen)
     
     def build_gameplay_screen(self):
-        self.gameplay_screen = GameplayScreen(self.accountService, self.boardService, self.surface)
+        self.gameplay_screen = GameplayScreen()
         self.gameplay_screen.add_elements()

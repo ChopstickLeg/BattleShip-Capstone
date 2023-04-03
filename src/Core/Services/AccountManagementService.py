@@ -26,7 +26,8 @@ class AccountManagementService(AMSI):
         gamesPlayed = self.c.fetchall()
         self.c.execute("""SELECT GamesWon FROM Accounts WHERE Key = ?""", (id, ))
         gamesWon = self.c.fetchall()
-        return Account(user, passwd, gamesPlayed, gamesWon)
+        returnAccount = Account(user[0][0], passwd[0][0], gamesPlayed[0][0], gamesWon[0][0])
+        return returnAccount
     
     def loginAccount(self, user, passwd):
         self.c.execute("""SELECT Key FROM Accounts WHERE Username = ? AND Password = ?""", (user, passwd))

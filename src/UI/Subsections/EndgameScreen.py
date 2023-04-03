@@ -3,10 +3,7 @@ import pygame_menu
 from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 
-class EndgameScreen(UII):
-    def __init__(self, service, surface):
-        super().__init__(service, surface)
-    
+class EndgameScreen(UII):   
     def add_elements(self):
         self.endgame_screen = pygame_menu.Menu("Game Over", 100, 200, theme = pygame_menu.themes.THEME_BLUE)
         self.endgame_screen.add.button("Rematch")

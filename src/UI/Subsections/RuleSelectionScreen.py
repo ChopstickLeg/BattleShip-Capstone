@@ -6,11 +6,12 @@ from .ShipPlacementScreen import ShipPlacementScreen
 from Core.Data import globals
 
 class RuleSelectionScreen(UII):
-    def __init__(self, service, service2, surface):
-        super().__init__(service, service2, surface)
+    def __init__(self):
+        super().__init__()
+        self.board = None
     def add_elements(self):
         self.rule_selection_screen = pygame_menu.Menu("Select Your Rules", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.logged_in1, self.logged_in2 = self.accountService.get_logged_in()
+        self.logged_in1, self.logged_in2 = globals.services[0].get_logged_in()
         if self.logged_in2 != None:
             self.rule_selection_screen.add.label("Logged in users: " + self.logged_in1.user[0][0] + " " + self.logged_in2.user[0][0])
         else:
@@ -30,7 +31,7 @@ class RuleSelectionScreen(UII):
         self.run_screen(self.rule_selection_screen)
 
     def build_ship_placement_screen(self):
-        self.ship_placement_screen = ShipPlacementScreen(self.accountService, self.boardService, self.surface)
+        self.ship_placement_screen = ShipPlacementScreen(self.board)
         self.ship_placement_screen.add_elements()
 
     def check_salvo_mode(self, state):
@@ -64,7 +65,7 @@ class RuleSelectionScreen(UII):
         ship3 = int(ship3[0])
         ship2 = int(ship2[0])
         try:
-            globals.board.append(self.boardService.generate_board(board_size[0][1], ship5, ship4, ship3, ship2, globals.account1[0], globals.account2[0], salvo, chain))
+            self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, globals.account1[0], globals.account2[0], salvo, chain)
         except IndexError:
-            globals.board.append(self.boardService.generate_board(size = board_size[0][1], ship5 = ship5, ship4 = ship4, ship3 = ship3, ship2 = ship2, player1 = globals.account1[0], salvo = salvo, chain = chain))
+            self.board = globals.services[1].generate_board(size = board_size[0][1], ship5 = ship5, ship4 = ship4, ship3 = ship3, ship2 = ship2, player1 = globals.account1[0], salvo = salvo, chain = chain)
         self.build_ship_placement_screen()

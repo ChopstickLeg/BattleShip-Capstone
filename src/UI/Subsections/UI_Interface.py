@@ -2,12 +2,11 @@ from abc import ABC, abstractmethod
 import pygame
 import pygame_menu
 from tkinter import messagebox
+from Core.Data import globals
 
 class UI_Interface(ABC):
-    def __init__(self, accountService, boardService, surface):
-        self.accountService = accountService
-        self.boardService = boardService
-        self.surface = surface
+    def __init__(self):
+        pass
     
     def run_screen(self, menu):
         while True:
@@ -17,13 +16,13 @@ class UI_Interface(ABC):
                     pygame.quit()
                     break
                 if event.type == pygame.VIDEORESIZE:
-                    self.surface = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                    globals.surface[0] = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                     self.on_resize(menu)
             menu.update(events)
-            menu.draw(self.surface)
+            menu.draw(globals.surface[0])
             pygame.display.flip()
     
     def on_resize(self, menu):
-        windowSize = self.surface.get_size()
+        windowSize = globals.surface[0].get_size()
         newW, newH = windowSize[0], windowSize[1]
         menu.resize(newW, newH)
