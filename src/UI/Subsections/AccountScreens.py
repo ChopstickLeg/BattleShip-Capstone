@@ -33,8 +33,7 @@ class AccountsScreens(UII):
     
     def add_mode_selection_elements(self):
         self.mode_selection_screen = pygame_menu.Menu("Select A Mode", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.logged_in1, self.logged_in2 = globals.services[0].get_logged_in()
-        self.mode_selection_screen.add.label("Logged in as: " + globals.account1[0])
+        self.mode_selection_screen.add.label("Logged in as: " + globals.account1[0].user)
         self.mode_selection_screen.add.button("Player v Player", self.add_login_elements)
         self.mode_selection_screen.add.button("Player v Computer", self.build_rule_selection_screen)
         self.mode_selection_screen.add.button("Resume Game", self.build_saved_games_screen)
@@ -50,17 +49,16 @@ class AccountsScreens(UII):
         self.saved_games_screen = SavedGamesScreen()
         self.saved_games_screen.add_elements()
     def login_pressed(self):
-        self.logged_in1, self.logged_in2 = globals.services[0].get_logged_in()
-        if self.logged_in1 == None:
+        if len(globals.account1) != 1:
             try:
                 globals.account1.append(globals.services[0].loginAccount(self.login_user_input.get_value(), self.login_pass_input.get_value()))
             except IndexError:
                 messagebox.showerror(title="Account not found", message="An account with that user information could not be found, please try again")
                 self.run_screen(self.login_screen)
             self.add_mode_selection_elements()
-        elif self.logged_in2 == None:
+        elif len(globals.account2) != 1:
             try:
-                if self.login_user_input.get_value() == self.logged_in1.user[0][0]:
+                if self.login_user_input.get_value() == globals.account1[0].user:
                     messagebox.showerror(title="Same user login", message="The same user cannot be logged in twice.")
                     self.login_pass_input.clear()
                     self.login_user_input.clear()

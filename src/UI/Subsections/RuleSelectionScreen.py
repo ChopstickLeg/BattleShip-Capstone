@@ -11,11 +11,10 @@ class RuleSelectionScreen(UII):
         self.board = None
     def add_elements(self):
         self.rule_selection_screen = pygame_menu.Menu("Select Your Rules", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
-        self.logged_in1, self.logged_in2 = globals.services[0].get_logged_in()
-        if self.logged_in2 != None:
-            self.rule_selection_screen.add.label("Logged in users: " + self.logged_in1.user[0][0] + " " + self.logged_in2.user[0][0])
+        if len(globals.account2) == 1:
+            self.rule_selection_screen.add.label("Logged in users: " + globals.account1[0].user + " " + globals.account2[0].user)
         else:
-            self.rule_selection_screen.add.label("Logged in user: " + self.logged_in1.user[0][0])
+            self.rule_selection_screen.add.label("Logged in user: " + globals.account1[0].user)
         self.board_size = self.rule_selection_screen.add.dropselect(title = "Select Board Size", items = [('7 x 7', 7), ("8 x 8", 8), ('9 x 9', 9), ('10 x 10', 10), ('11 x 11', 11), ('12 x 12', 12), ('13 x 13', 13)])
         #add restrictions to these based on board size?
         self.ship5 = self.rule_selection_screen.add.dropselect(title = "Select number of 5 length ships", items = ["1", "2", "3"])

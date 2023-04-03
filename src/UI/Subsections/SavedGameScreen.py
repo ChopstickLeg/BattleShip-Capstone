@@ -3,6 +3,7 @@ import pygame_menu
 from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 from .GameplayScreen import GameplayScreen
+import sys
 
 class SavedGamesScreen(UII):
     def add_elements(self):
@@ -14,5 +15,5 @@ class SavedGamesScreen(UII):
         self.run_screen(self.saved_games_screen)
     
     def build_gameplay_screen(self):
-        self.gameplay_screen = GameplayScreen()
-        self.gameplay_screen.add_elements()
+        messagebox.showerror(title="Not yet implmented", message="This screen has not yet been fully implemented, the program will now exit")
+        sys.exit()

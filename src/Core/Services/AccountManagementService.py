@@ -34,11 +34,11 @@ class AccountManagementService(AMSI):
         out = self.c.fetchall()
         if self.logged_in1 == None:
             self.logged_in1 = self.getAccount(out[0][0])
+            return self.logged_in1
         elif self.logged_in2 == None:
             self.logged_in2 = self.getAccount(out[0][0])
-
-    def get_logged_in(self):
-        return self.logged_in1, self.logged_in2
+            return self.logged_in2
+        
     
     def recordWin(self, id):
         acct = self.getaccount(id)
