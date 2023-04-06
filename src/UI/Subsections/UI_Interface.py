@@ -15,9 +15,6 @@ class UI_Interface(ABC):
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     break
-                if event.type == pygame.VIDEORESIZE:
-                    globals.surface[0] = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                    self.on_resize(menu)
             menu.update(events)
             menu.draw(globals.surface[0])
             pygame.display.flip()

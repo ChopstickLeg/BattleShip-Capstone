@@ -9,4 +9,14 @@ class Board(object):
         self.player2 = player2
         self.salvo = salvo
         self.chain = chain
-        self.board = [[-1 for i in range(size)]for i in range(size)]
+        self.board1 = [[-1 for i in range(size)]for i in range(size)]
+        self.board2 = [[-1 for i in range(size)]for i in range(size)]
+        self.ship_list = []
+        for x in range(ship5):
+            self.ship_list.append(5)
+        for x in range(ship4):
+            self.ship_list.append(4)
+        for x in range(ship3):
+            self.ship_list.append(3)
+        for x in range(ship2):
+            self.ship_list.append(2)
