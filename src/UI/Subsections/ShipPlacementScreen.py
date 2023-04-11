@@ -21,12 +21,14 @@ class ShipPlacementScreen(UII):
         self.tile_size = self.calculate_tile_size()
         self.board_pos = [(self.resx / 2) - self.tile_size * (self.num / 2), (self.resy / 2) - self.tile_size * (self.num / 2) - 50]
         self.button_pos = [self.board_pos[0], self.resy / 2 + (self.tile_size * (self.num / 2)) - 50]
+        self.titleFont = pygame.font.SysFont("", 60)
         self.font = pygame.font.SysFont('', 32)
         self.ship_button_txt = self.get_ship_button_txt()
         self.ship_button_fn_list = self.get_ship_fn()
+        self.buttons_wide, self.buttons_long = self.calculate_button_nums()
         self.ship_button_list = []
         self.board_surf = self.create_board_surf()
-        self.button_surf = self.create_button_surf(board)
+        self.button_surf = self.create_button_surf()
         self.clock = pygame.time.Clock()
         self.selected_ship = None
         self.selected_square = None
@@ -36,6 +38,16 @@ class ShipPlacementScreen(UII):
     
     def add_elements(self):
         self.run_screen()
+    
+    def calculate_button_nums(self):
+        if len(self.board.ship_list) > 5:
+            #Need to add touchups to the rule selection screen so that it limits the number of possible ships
+            wide = 2
+            long = len(self.board.ship_list) // 2 + len(self.board.ship_list) % 2
+        else:
+            wide = 1
+            long = len(self.board.ship_list)
+        return wide, long
     
     def get_smallest(self):
         if self.resx >= self.resy:
@@ -70,10 +82,10 @@ class ShipPlacementScreen(UII):
                 pygame.draw.rect(board_surf, pygame.Color('black'), rect, 2)
         return board_surf
     
-    def create_button_surf(self, board):
+    def create_button_surf(self):
         button_surf = pygame.surface.Surface((self.resx, self.resy))
         button_surf.fill((228, 230, 246))
-        self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (len(self.board.ship_list), 1), border = 10, texts = self.ship_button_txt,
+        self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (self.buttons_wide, self.buttons_long), border = 10, texts = self.ship_button_txt,
                                             onClicks = self.ship_button_fn_list)
         self.exit_button = Button(button_surf, self.resx - 100, 0, 100, 100, text = "X", onClick = lambda: quit())
         self.next_screen = Button(button_surf, self.resx - 100, self.resy - 100, 100, 100, text = "Next", onClick = self.build_next_screen)
@@ -82,7 +94,6 @@ class ShipPlacementScreen(UII):
     
     def change_selected(self, num):
         self.selected_ship = num
-        print(num)
     
     def reset_board(self):
         if self.isBoard2:
@@ -105,18 +116,18 @@ class ShipPlacementScreen(UII):
         if self.selected_square:
             square, sx, sy = self.selected_square
             if square == -1:
-                if not globals.services[1].verify_placement(board, sx, sy, self.last_placed, self.ship_count[self.selected_ship], self.board.ship_list[self.selected_ship], self.selected_ship):
+                if not globals.services[1].verify_placement(board, sy, sx, self.last_placed, self.ship_count[self.selected_ship], self.board.ship_list[self.selected_ship], self.selected_ship):
                     messagebox.showerror("Ship placed improperly", "Ship has been placed in an invalid location, please try again")
                     return
                 else:
-                    board[sx][sy] = self.selected_ship
+                    board[sy][sx] = self.selected_ship
                     self.ship_count[self.selected_ship] += 1
-                    self.last_placed = (sx, sy)
+                    self.last_placed = (sy, sx)
         for x in range(self.num):
             for y in range(self.num):
-                if board[x][y] != -1:
-                    s1 = self.font.render("s" + str(board[x][y] + 1), True, pygame.Color("black"))
-                    s2 = self.font.render("s" + str(board[x][y] + 1), True, pygame.Color("darkgrey"))
+                if board[y][x] != -1:
+                    s1 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("black"))
+                    s2 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("darkgrey"))
                     pos = pygame.Rect(self.board_pos[0] + x * self.tile_size+1, self.board_pos[1] + y * self.tile_size + 1, self.tile_size, self.tile_size)
                     globals.surface[0].blit(s2, s2.get_rect(center = pos.center).move(1, 1))
                     globals.surface[0].blit(s1, s1.get_rect(center = pos.center))
@@ -184,6 +195,12 @@ class ShipPlacementScreen(UII):
             globals.surface[0].fill(pygame.Color('grey'))
             globals.surface[0].blit(self.button_surf, [0, 0])
             globals.surface[0].blit(self.board_surf, self.board_pos)
+
+            s = self.titleFont.render("Place Your Ships", True, pygame.Color("black"))
+            s2 = self.titleFont.render("Place Your Ships", True, pygame.Color("darkgrey"))
+            globals.surface[0].blit(s2, (1, 1))
+            globals.surface[0].blit(s, (0, 0))
+            
             if self.selected_ship != None:
                 self.draw_selector(globals.surface[0], ship, x, y)
                 self.add_click_instructions(globals.surface[0])

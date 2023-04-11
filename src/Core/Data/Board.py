@@ -11,6 +11,8 @@ class Board(object):
         self.chain = chain
         self.board1 = [[-1 for i in range(size)]for i in range(size)]
         self.board2 = [[-1 for i in range(size)]for i in range(size)]
+        self.shotBoard1 = [[None for i in range(size)] for i in range(size)]
+        self.shotBoard2 = [[None for i in range(size)] for i in range(size)]
         self.ship_list = []
         for x in range(ship5):
             self.ship_list.append(5)
