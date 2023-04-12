@@ -91,8 +91,9 @@ class GameplayScreen(UII):
                 self.draw_ships(self.board.board2)
                 self.draw_hits(self.board.board2)
 
-            self.fire_button = Button(globals.surface[0], self.resx - 100, self.resy - 50, 100, 50, text = "FIRE", )
-            
+            self.fire_button = Button(globals.surface[0], self.resx - 100, self.resy - 50, 100, 50, text = "FIRE", onClick = self.fire)
+            self.reset_shots = Button(globals.surface[0], 0, self.resy - 50, 100, 50, text = "reset shots", onClick = self.reset_shot)
+            self.pause_button = Button(globals.surface[0], self.resx - 50, 0, 50, 50, text = "||", onClick = self.build_pause_screen)
             
             pygame_widgets.update(events)
             pygame.display.update()
@@ -127,28 +128,28 @@ class GameplayScreen(UII):
             for y in range(self.num):
                 if self.board.shotBoard1[y][x] == 1 and globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
-                    if shipBoard[y][x] != -1:
-                        pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
-                    if shipBoard[y][x] == -1:
-                        pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                    pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard2[y][x] == 1 and globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
-                    if shipBoard[y][x] != -1:
-                        pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
-                    if shipBoard[y][x] == -1:
-                        pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                    pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard2[y][x] == 1 and not globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
-                    if shipBoard[y][x] != -1:
-                        pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
-                    if shipBoard[y][x] == -1:
-                        pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                    pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard1[y][x] == 1 and not globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
-                    if shipBoard[y][x] != -1:
-                        pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
-                    if shipBoard[y][x] == -1:
-                        pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                    pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard1[y][x] == 2 and globals.services[2].isPlayer1:
+                    center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard2[y][x] == 2 and globals.services[2].isPlayer1:
+                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard2[y][x] == 2 and not globals.services[2].isPlayer1:
+                    center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard1[y][x] == 2 and not globals.services[2].isPlayer1:
+                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard1[y][x] == 0:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
@@ -158,19 +159,40 @@ class GameplayScreen(UII):
     
     def fire(self):
         shots = []
+        startP1 = globals.services[2].isPlayer1
+        if startP1:
+            board = self.board.shotBoard1
+            shipBoard = self.board.board1
+        else:
+            board = self.board.shotBoard2
+            shipBoard = self.board.board2
+        for x in range(self.num):
+            for y in range(self.num):
+                if board[y][x] == 0:
+                    shots.append([y, x])
+        if self.board.salvo and len(shots) != self.standing_ships:
+            messagebox.showerror("Invalid number of shots", "The number of shots you attempted to fire is invalid given your chosen settings, please try again")
+            self.run_screen()
+        if not self.board.salvo and len(shots) != 1:
+            messagebox.showerror("Invalid number of shots", "The number of shots you attempted to fire is invalid given your chosen settings, please try again")
+            self.run_screen()
+        if self.board.chain:
+            globals.services[2].chain_fire(shots, board, shipBoard)
+        else:
+            globals.services[2].fire(shots, board)
+        if startP1 != globals.services[2].isPlayer1:
+            tScreen = TransitionScreen()
+            tScreen.add_elements
+
+    def reset_shot(self):
         if globals.services[2].isPlayer1:
             board = self.board.shotBoard1
         else:
             board = self.board.shotBoard2
         for x in range(self.num):
             for y in range(self.num):
-                if board[y][x] == 0:
-                    shots.append([x, y])
-        if self.board.salvo and len(shots) != self.standing_ships:
-            messagebox.showerror("Invalid number of shots", "You have not placed down a valid number of shots, please try again")
-        #More like above but for normal mode
-        globals.services[2].fire_shots(shots, board)
-
+                if board[x][y] == 0:
+                    board[x][y] = -1
     
     def build_pause_screen(self):
         self.pause_screen = PauseScreen()
