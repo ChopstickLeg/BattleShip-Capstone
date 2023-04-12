@@ -20,9 +20,10 @@ class GameplayScreen(UII):
         self.board2pos = [(self.resx / 4 * 3) - self.tile_size * (self.num/2), (self.resy / 2) - self.tile_size * (self.num / 2)]
         self.titleFont = pygame.font.SysFont("", 60)
         self.font = pygame.font.SysFont("", 32)
-        self.selected_ship = None
+        self.selected_square = None
         self.board1_surf = self.create_board_surf()
         self.board2_surf = self.create_board_surf()
+        self.standing_ships = self.num
 
 
     def calculate_tile_size(self):
@@ -59,16 +60,18 @@ class GameplayScreen(UII):
     
     def run_screen(self):
         while True:
-            ship, x, y = self.get_square_under_mouse(self.board.board1)
+            if globals.services[2].isPlayer1:
+                ship, x, y = self.get_square_under_mouse(self.board.shotBoard1)
+            else:
+                ship, x, y = self.get_square_under_mouse(self.board.shotBoard2)
             events = pygame.event.get()
             for e in events:
                 if e.type == pygame.QUIT:
                     pygame.quit()
                     quit()
                 if e.type == pygame.MOUSEBUTTONUP:
-                    if self.selected_ship != None:
-                        if ship == None:
-                            self.selected_square = ship, x, y
+                    if ship == -1:
+                        self.selected_square = ship, x, y
 
                     
             globals.surface[0].fill((228, 230, 246))
@@ -86,6 +89,9 @@ class GameplayScreen(UII):
                 self.draw_hits(self.board.board1)
             else:
                 self.draw_ships(self.board.board2)
+                self.draw_hits(self.board.board2)
+
+            self.fire_button = Button(globals.surface[0], self.resx - 100, self.resy - 50, 100, 50, text = "FIRE", )
             
             
             pygame_widgets.update(events)
@@ -96,6 +102,11 @@ class GameplayScreen(UII):
             self.selected_square = None
 
     def draw_ships(self, board):
+        if globals.services[2].isPlayer1:
+            s = self.titleFont.render("Player 1 " + globals.account1[0].user, True, pygame.Color("black"))
+        else:
+            s = self.titleFont.render("Player 2 " + globals.account2[0].user, True, pygame.Color("Black"))
+        globals.surface[0].blit(s, (self.resx / 2 - 100, self.resy / 2 - self.tile_size * (self.num / 2) - 50))
         for x in range(self.num):
             for y in range(self.num):
                 if board[y][x] != -1:
@@ -106,11 +117,11 @@ class GameplayScreen(UII):
                     globals.surface[0].blit(s1, s1.get_rect(center = pos.center))
 
     def draw_hits(self, shipBoard):
-        if self.selected_ship:
+        if self.selected_square:
             if globals.services[2].isPlayer1:
-                self.board.shotBoard1[y][x] = 0
+                self.board.shotBoard1[self.selected_square[2]][self.selected_square[1]] = 0
             else:
-                self.board.shotBoard2[y][x] = 0
+                self.board.shotBoard2[self.selected_square[2]][self.selected_square[1]] = 0
 
         for x in range(self.num):
             for y in range(self.num):
@@ -139,11 +150,26 @@ class GameplayScreen(UII):
                     if shipBoard[y][x] == -1:
                         pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard1[y][x] == 0:
-                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
                 if self.board.shotBoard2[y][x] == 0:
-                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
+    
+    def fire(self):
+        shots = []
+        if globals.services[2].isPlayer1:
+            board = self.board.shotBoard1
+        else:
+            board = self.board.shotBoard2
+        for x in range(self.num):
+            for y in range(self.num):
+                if board[y][x] == 0:
+                    shots.append([x, y])
+        if self.board.salvo and len(shots) != self.standing_ships:
+            messagebox.showerror("Invalid number of shots", "You have not placed down a valid number of shots, please try again")
+        #More like above but for normal mode
+        globals.services[2].fire_shots(shots, board)
 
     
     def build_pause_screen(self):
