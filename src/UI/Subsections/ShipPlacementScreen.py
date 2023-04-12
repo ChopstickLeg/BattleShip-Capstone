@@ -85,7 +85,8 @@ class ShipPlacementScreen(UII):
     def create_button_surf(self):
         button_surf = pygame.surface.Surface((self.resx, self.resy))
         button_surf.fill((228, 230, 246))
-        self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (self.buttons_wide, self.buttons_long), border = 10, texts = self.ship_button_txt,
+        #Fix index error for odd number of ships here
+        self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (self.buttons_long, self.buttons_wide), border = 10, texts = self.ship_button_txt,
                                             onClicks = self.ship_button_fn_list)
         self.exit_button = Button(button_surf, self.resx - 100, 0, 100, 100, text = "X", onClick = lambda: quit())
         self.next_screen = Button(button_surf, self.resx - 100, self.resy - 100, 100, 100, text = "Next", onClick = self.build_next_screen)

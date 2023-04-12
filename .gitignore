@@ -20,3 +20,4 @@ src/Core/Data/__pycache__/globals.cpython-310.pyc
 src/Core/Services/__pycache__/BoardManagementService.cpython-310.pyc
 src/Core/Services/__pycache__/BoardManagementServiceInterface.cpython-310.pyc
 src/UI/Subsections/tst.py
+src/UI/Subsections/__pycache__/TransitionScreen.cpython-310.pyc
