@@ -21,3 +21,5 @@ src/Core/Services/__pycache__/BoardManagementService.cpython-310.pyc
 src/Core/Services/__pycache__/BoardManagementServiceInterface.cpython-310.pyc
 src/UI/Subsections/tst.py
 src/UI/Subsections/__pycache__/TransitionScreen.cpython-310.pyc
+src/Core/Services/__pycache__/GamePlayService.cpython-310.pyc
+src/Core/Services/__pycache__/GameplayServiceInterface.cpython-310.pyc
