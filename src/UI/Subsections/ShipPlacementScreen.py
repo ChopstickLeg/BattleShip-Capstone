@@ -6,6 +6,7 @@ from functools import partial
 from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 from .GameplayScreen import GameplayScreen
+from .TransitionScreen import TransitionScreen
 from Core.Data import globals
 from pygame.locals import *
 
@@ -171,7 +172,12 @@ class ShipPlacementScreen(UII):
             self.ship_count = [0 for i in range(len(self.board.ship_list))]
             self.last_placed = ()
             self.run_screen()
-        else:
+        elif globals.services[0].isPVP and self.isBoard2:
+            if globals.services[2].isPlayer1:
+                transitionScreen = TransitionScreen("Player 1 goes first")
+            else:
+                transitionScreen = transitionScreen("Player 2 goes first")
+            transitionScreen.run_screen()
             gameplay_screen = GameplayScreen(self.board)
             gameplay_screen.add_elements()
 
