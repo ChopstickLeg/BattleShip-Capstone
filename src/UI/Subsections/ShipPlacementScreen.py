@@ -166,7 +166,7 @@ class ShipPlacementScreen(UII):
             if ship_totals[i] != self.board.ship_list[i]:
                 messagebox.showerror("Not enough ships placed", "Please place all ships before continuing")
                 self.run_screen()
-        if len(globals.account2) == 1 and not self.isBoard2:
+        if globals.services[0].isPVP and not self.isBoard2:
             self.isBoard2 = True
             self.ship_count = [0 for i in range(len(self.board.ship_list))]
             self.last_placed = ()

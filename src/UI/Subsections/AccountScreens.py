@@ -43,6 +43,11 @@ class AccountsScreens(UII):
         self.run_screen(self.mode_selection_screen)
 
     def build_rule_selection_screen(self):
+        if len(globals.account2) != 1:
+            globals.services[0].isPVP = False
+            globals.account2.append(globals.services[0].getAccount(1))
+        else:
+            globals.services[0].isPVP = True
         self.rule_selection_screen = RuleSelectionScreen()
         self.rule_selection_screen.add_elements()
     def build_saved_games_screen(self):

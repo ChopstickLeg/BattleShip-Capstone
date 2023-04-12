@@ -8,8 +8,11 @@ class AccountManagementService(AMSI):
         self.conn = sqlite3.connect(r".\BattleshipDB.db")
         self.c = self.conn.cursor()
         self.c.execute("""CREATE TABLE IF NOT EXISTS Accounts (Key INTEGER PRIMARY KEY, Username VARCHAR(256) NOT NULL UNIQUE, Password VARCHAR(256) NOT NULL, GamesPlayed INTEGER NOT NULL, GamesWon INTEGER NOT NULL)""")
+        self.c.execute("""INSERT INTO Accounts (Username, Password, GamesPlayed, GamesWon) SELECT 'Computer', 'None', 0, 0 WHERE NOT EXISTS (SELECT Username FROM Accounts WHERE Username = "Computer")""")
+        self.conn.commit()
         self.logged_in1 = None
         self.logged_in2 = None
+        self.isPVP = False
 
     def createAccount(self, user, passwd):
         newAccount = Account(user, passwd)
