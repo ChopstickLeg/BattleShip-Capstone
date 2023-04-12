@@ -6,7 +6,6 @@ from .UI_Interface import UI_Interface as UII
 from .PauseScreen import PauseScreen
 from .TransitionScreen import TransitionScreen
 from Core.Data import globals
-import random
 
 class GameplayScreen(UII):
     def __init__(self, board):
@@ -24,8 +23,6 @@ class GameplayScreen(UII):
         self.selected_ship = None
         self.board1_surf = self.create_board_surf()
         self.board2_surf = self.create_board_surf()
-        if random.randint(0, 1) == 0:
-            self.isPlayer1 = True
 
 
     def calculate_tile_size(self):
@@ -70,7 +67,7 @@ class GameplayScreen(UII):
                     quit()
                 if e.type == pygame.MOUSEBUTTONUP:
                     if self.selected_ship != None:
-                        if ship == -1:
+                        if ship == None:
                             self.selected_square = ship, x, y
 
                     
@@ -84,7 +81,7 @@ class GameplayScreen(UII):
             globals.surface[0].blit(s, (0, 0))
             
             self.draw_selector(globals.surface[0], ship, x, y)
-            if self.isPlayer1:
+            if globals.services[2].isPlayer1:
                 self.draw_ships(self.board.board1)
                 self.draw_hits(self.board.board1)
             else:
@@ -109,32 +106,44 @@ class GameplayScreen(UII):
                     globals.surface[0].blit(s1, s1.get_rect(center = pos.center))
 
     def draw_hits(self, shipBoard):
+        if self.selected_ship:
+            if globals.services[2].isPlayer1:
+                self.board.shotBoard1[y][x] = 0
+            else:
+                self.board.shotBoard2[y][x] = 0
+
         for x in range(self.num):
             for y in range(self.num):
-                if self.board.shotBoard1[y][x] and self.isPlayer1:
+                if self.board.shotBoard1[y][x] == 1 and globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     if shipBoard[y][x] != -1:
                         pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
                     if shipBoard[y][x] == -1:
                         pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
-                if self.board.shotBoard2[y][x] and self.isPlayer1:
+                if self.board.shotBoard2[y][x] == 1 and globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
                     if shipBoard[y][x] != -1:
                         pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
                     if shipBoard[y][x] == -1:
                         pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
-                if self.board.shotBoard2[y][x] and not self.isPlayer1:
+                if self.board.shotBoard2[y][x] == 1 and not globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     if shipBoard[y][x] != -1:
                         pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
                     if shipBoard[y][x] == -1:
                         pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
-                if self.board.shotBoard1[y][x] and not self.isPlayer1:
+                if self.board.shotBoard1[y][x] == 1 and not globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
                     if shipBoard[y][x] != -1:
                         pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
                     if shipBoard[y][x] == -1:
                         pygame.draw.circle(globals.surface[0], (0, 0, 0), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard1[y][x] == 0:
+                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
+                if self.board.shotBoard2[y][x] == 0:
+                    center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
+                    pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
 
     
     def build_pause_screen(self):
