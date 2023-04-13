@@ -63,8 +63,5 @@ class RuleSelectionScreen(UII):
         ship4 = int(ship4[0])
         ship3 = int(ship3[0])
         ship2 = int(ship2[0])
-        try:
-            self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, globals.account1[0], globals.account2[0], salvo, chain)
-        except IndexError:
-            self.board = globals.services[1].generate_board(size = board_size[0][1], ship5 = ship5, ship4 = ship4, ship3 = ship3, ship2 = ship2, player1 = globals.account1[0], salvo = salvo, chain = chain)
+        self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, globals.account1[0], globals.account2[0], salvo, chain)
         self.build_ship_placement_screen()

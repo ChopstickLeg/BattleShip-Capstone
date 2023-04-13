@@ -11,7 +11,7 @@ class AccountsScreens(UII):
     def add_login_elements(self):
         self.login_screen = pygame_menu.Menu("Login",100, 200, theme=pygame_menu.themes.THEME_BLUE)
         self.login_user_input = self.login_screen.add.text_input("Username: ")
-        self.login_pass_input = self.login_screen.add.text_input("Password: ")
+        self.login_pass_input = self.login_screen.add.text_input("Password: ", password=True)
         self.login_screen.add.button("Create Account", self.add_create_account_elements)
         self.login_screen.add.button("Login", self.login_pressed)
         self.login_screen.add.button("Exit", pygame_menu.events.EXIT)
@@ -22,8 +22,8 @@ class AccountsScreens(UII):
     def add_create_account_elements(self):
         self.create_account_screen = pygame_menu.Menu("Create Account", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
         self.create_user_input = self.create_account_screen.add.text_input("Username: ")
-        self.create_pass_input = self.create_account_screen.add.text_input("Password: ")
-        self.create_pass_confirm_input = self.create_account_screen.add.text_input("Confirm Password: ")
+        self.create_pass_input = self.create_account_screen.add.text_input("Password: ", password=True)
+        self.create_pass_confirm_input = self.create_account_screen.add.text_input("Confirm Password: ", password=True)
         self.create_account_screen.add.button("Create Account", self.create_account_pressed)
         self.create_account_screen.add.button("Back to Login", self.add_login_elements)
         self.create_account_screen.add.button("Exit", pygame_menu.events.EXIT)

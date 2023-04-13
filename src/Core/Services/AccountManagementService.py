@@ -1,6 +1,7 @@
 from uuid import uuid4
 from .AccountManagementServiceInterface import AccountManagementServiceInterface as AMSI
 from ..Data.Account import Account
+from Core.Data import globals
 import sqlite3
 
 class AccountManagementService(AMSI):
@@ -29,7 +30,7 @@ class AccountManagementService(AMSI):
         gamesPlayed = self.c.fetchall()
         self.c.execute("""SELECT GamesWon FROM Accounts WHERE Key = ?""", (id, ))
         gamesWon = self.c.fetchall()
-        returnAccount = Account(user[0][0], passwd[0][0], gamesPlayed[0][0], gamesWon[0][0])
+        returnAccount = Account(user[0][0], passwd[0][0], gamesPlayed[0][0], gamesWon[0][0], id)
         return returnAccount
     
     def loginAccount(self, user, passwd):
@@ -44,9 +45,10 @@ class AccountManagementService(AMSI):
         
     
     def recordWin(self, id):
-        acct = self.getaccount(id)
+        acct = self.getAccount(id)
         self.c.execute("""UPDATE Accounts SET GamesPlayed = ?, GamesWon = ? WHERE Key = ?""", (acct.gamesPlayed + 1, acct.gamesWon + 1, id))
+        globals.game_winner.append(self.getAccount(id))
 
     def recordLoss(self, id):
-        acct = self.getaccount(id)
+        acct = self.getAccount(id)
         self.c.execute("""UPDATE Accounts SET GamesPlayed = ? WHERE Key = ?""", (acct.gamesPlayed + 1, id))

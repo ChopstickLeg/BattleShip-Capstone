@@ -176,7 +176,7 @@ class ShipPlacementScreen(UII):
             if globals.services[2].isPlayer1:
                 transitionScreen = TransitionScreen("Player 1 goes first")
             else:
-                transitionScreen = transitionScreen("Player 2 goes first")
+                transitionScreen = TransitionScreen("Player 2 goes first")
             transitionScreen.run_screen()
             gameplay_screen = GameplayScreen(self.board)
             gameplay_screen.add_elements()

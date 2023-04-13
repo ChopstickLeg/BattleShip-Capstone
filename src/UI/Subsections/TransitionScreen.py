@@ -10,21 +10,20 @@ class TransitionScreen(UII):
         self.titleFont = pygame.font.SysFont("", 60)
         self.txt = txt
     def run_screen(self):
-        pygame.time.wait(2000)
         while True:
             events = pygame.event.get()
             for e in events:
-                if e.type == pygame.KEYUP:
+                if e.type == pygame.KEYDOWN:
                     return
-                if e.type == pygame.MOUSEBUTTONUP:
+                if e.type == pygame.MOUSEBUTTONDOWN:
                     return
             globals.surface[0].fill(pygame.Color("black"))
             resx, resy = globals.surface[0].get_size()
-            txtLocation = (resx / 2 - 100, resy - 40)
+            txtLocation = (resx / 2 - 240, resy - 30)
             s = self.font.render("Please switch players now, to dismiss this screen, press any button", True, pygame.Color("white"))
             if self.txt != "":
                 s1 = self.font.render(self.txt, True, pygame.Color("white"))
-                globals.surface.blit(s1, resx / 2 - 50, resy / 2)
+                globals.surface[0].blit(s1, (resx / 2 - 40, resy / 2))
             globals.surface[0].blit(s, txtLocation)
             pygame.display.flip()
             self.clock.tick(60)
