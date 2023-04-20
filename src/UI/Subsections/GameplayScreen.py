@@ -165,6 +165,7 @@ class GameplayScreen(UII):
     def fire(self):
         shots = []
         startP1 = globals.services[2].isPlayer1
+        hit = False
         if startP1:
             board = self.board.shotBoard1
             shipBoard = self.board.board2
@@ -188,9 +189,13 @@ class GameplayScreen(UII):
             self.standing_ships, self.is_end = globals.services[2].chain_fire(shots, board, shipBoard)
         else:
             self.standing_ships, self.is_end = globals.services[2].fire(shots, board, shipBoard)
-        if startP1 != globals.services[2].isPlayer1 or not self.is_end:
+        if startP1 != globals.services[2].isPlayer1 or not self.is_end or globals.services[0].isPVP:
             tScreen = TransitionScreen()
             tScreen.run_screen()
+        elif globals.services[0].isPVP:
+            globals.services[3].fire(self.board.board1, self.board.shotBoard2, hit)
+            while hit and self.board.chain:
+                globals.services[3].fire(self.board.board1, self.board.shotBoard2, hit)
 
     def reset_shot(self):
         if globals.services[2].isPlayer1:
