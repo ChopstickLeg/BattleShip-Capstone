@@ -180,6 +180,10 @@ class ShipPlacementScreen(UII):
             transitionScreen.run_screen()
             gameplay_screen = GameplayScreen(self.board)
             gameplay_screen.add_elements()
+        elif not globals.services[0].isPVP:
+            self.board.board2 = globals.services[3].place_ships(self.num, self.board.ship_list, self.board.board2)
+            gameplay_screen = GameplayScreen(self.board)
+            gameplay_screen.add_elements()
 
     
     def run_screen(self):
