@@ -18,8 +18,3 @@ class UI_Interface(ABC):
             menu.update(events)
             menu.draw(globals.surface[0])
             pygame.display.flip()
-    
-    def on_resize(self, menu):
-        windowSize = globals.surface[0].get_size()
-        newW, newH = windowSize[0], windowSize[1]
-        menu.resize(newW, newH)

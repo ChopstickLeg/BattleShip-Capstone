@@ -15,7 +15,6 @@ class AccountsScreens(UII):
         self.login_screen.add.button("Create Account", self.add_create_account_elements)
         self.login_screen.add.button("Login", self.login_pressed)
         self.login_screen.add.button("Exit", pygame_menu.events.EXIT)
-        self.on_resize(self.login_screen)
         self.login_screen.enable()
         self.run_screen(self.login_screen)
     
@@ -27,7 +26,6 @@ class AccountsScreens(UII):
         self.create_account_screen.add.button("Create Account", self.create_account_pressed)
         self.create_account_screen.add.button("Back to Login", self.add_login_elements)
         self.create_account_screen.add.button("Exit", pygame_menu.events.EXIT)
-        self.on_resize(self.create_account_screen)
         self.create_account_screen.enable()
         self.run_screen(self.create_account_screen)
     
@@ -38,7 +36,6 @@ class AccountsScreens(UII):
         self.mode_selection_screen.add.button("Player v Computer", self.build_rule_selection_screen)
         self.mode_selection_screen.add.button("Resume Game", self.build_saved_games_screen)
         self.mode_selection_screen.add.button("Quit Application", pygame_menu.events.EXIT)
-        self.on_resize(self.mode_selection_screen)
         self.mode_selection_screen.enable()
         self.run_screen(self.mode_selection_screen)
 
