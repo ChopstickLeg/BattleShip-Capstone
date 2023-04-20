@@ -19,6 +19,7 @@ class EndgameScreen(UII):
         globals.game_winner.clear()
         #board = globals.services[1].generate_board(globals.rules[0][0], globals.rules[0][1], globals.rules[0][2], globals.rules[0][3], globals.rules[0][4], globals.rules[0][5], globals.rules[0][6], globals.rules[0][7], globals.rules[0][8])
         globals.rematch.append(True)
+        
     
     def return_to_login(self):
         globals.game_winner.clear()
