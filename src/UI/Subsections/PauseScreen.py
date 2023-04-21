@@ -9,11 +9,10 @@ class PauseScreen(UII):
         super().__init__()
         self.return_flag = False
     def add_elements(self):
-        self.pause_screen = pygame_menu.Menu("Game Paused", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        self.pause_screen = pygame_menu.Menu("Game Paused", globals.resx[0], globals.resy[0], 200, theme=pygame_menu.themes.THEME_BLUE)
         self.pause_screen.add.button("Resume game", self.swap_flag)
         self.pause_screen.add.button("Save & quit")
         self.pause_screen.add.button("Quit application", pygame_menu.events.EXIT)
-        self.on_resize(self.pause_screen)
         self.pause_screen.enable()
         self.run_screen(self.pause_screen)
     def swap_flag(self):

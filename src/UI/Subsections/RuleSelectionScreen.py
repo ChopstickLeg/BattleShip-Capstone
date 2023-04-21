@@ -10,7 +10,7 @@ class RuleSelectionScreen(UII):
         super().__init__()
         self.board = None
     def add_elements(self):
-        self.rule_selection_screen = pygame_menu.Menu("Select Your Rules", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        self.rule_selection_screen = pygame_menu.Menu("Select Your Rules", globals.resx[0], globals.resy[0], theme=pygame_menu.themes.THEME_BLUE)
         if len(globals.account2) == 1:
             self.rule_selection_screen.add.label("Logged in users: " + globals.account1[0].user + " " + globals.account2[0].user)
         else:
@@ -25,7 +25,6 @@ class RuleSelectionScreen(UII):
         self.chain_toggle = self.rule_selection_screen.add.toggle_switch(title="Chain hits", onchange=self.check_chain_mode)
         self.rule_selection_screen.add.button("Place your ships", self.create_board)
         self.rule_selection_screen.add.button("Exit Application", pygame_menu.events.EXIT)
-        self.on_resize(self.rule_selection_screen)
         self.rule_selection_screen.enable()
         self.run_screen(self.rule_selection_screen)
 

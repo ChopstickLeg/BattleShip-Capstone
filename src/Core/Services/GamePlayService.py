@@ -6,8 +6,6 @@ class GamePlayService(GMSI):
             self.isPlayer1 = True
         else:
             self.isPlayer1 = False
-        #This is just here for testing purposes, and will be removed later
-        self.isPlayer1 = True
     
     def fire(self, shots, shotBoard, shipBoard):
         end = False

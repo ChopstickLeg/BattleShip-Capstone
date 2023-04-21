@@ -9,7 +9,7 @@ from Core.Data import globals
 from Core.Data import Account
 class AccountsScreens(UII):
     def add_login_elements(self):
-        self.login_screen = pygame_menu.Menu("Login",100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        self.login_screen = pygame_menu.Menu("Login",globals.resx[0], globals.resy[0], theme=pygame_menu.themes.THEME_BLUE)
         self.login_user_input = self.login_screen.add.text_input("Username: ")
         self.login_pass_input = self.login_screen.add.text_input("Password: ", password=True)
         self.login_screen.add.button("Create Account", self.add_create_account_elements)
@@ -19,7 +19,7 @@ class AccountsScreens(UII):
         self.run_screen(self.login_screen)
     
     def add_create_account_elements(self):
-        self.create_account_screen = pygame_menu.Menu("Create Account", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        self.create_account_screen = pygame_menu.Menu("Create Account", globals.resx[0], globals.resy[0], theme=pygame_menu.themes.THEME_BLUE)
         self.create_user_input = self.create_account_screen.add.text_input("Username: ")
         self.create_pass_input = self.create_account_screen.add.text_input("Password: ", password=True)
         self.create_pass_confirm_input = self.create_account_screen.add.text_input("Confirm Password: ", password=True)
@@ -30,7 +30,7 @@ class AccountsScreens(UII):
         self.run_screen(self.create_account_screen)
     
     def add_mode_selection_elements(self):
-        self.mode_selection_screen = pygame_menu.Menu("Select A Mode", 100, 200, theme=pygame_menu.themes.THEME_BLUE)
+        self.mode_selection_screen = pygame_menu.Menu("Select A Mode", globals.resx[0], globals.resy[0], theme=pygame_menu.themes.THEME_BLUE)
         self.mode_selection_screen.add.label("Logged in as: " + globals.account1[0].user)
         self.mode_selection_screen.add.button("Player v Player", self.add_login_elements)
         self.mode_selection_screen.add.button("Player v Computer", self.build_rule_selection_screen)

@@ -17,6 +17,9 @@ class BattleshipUI(object):
         self.serviceCollection = {AccountManagementServiceInterface: AccountManagementService(), BoardManagementServiceInterface: BoardManagementService(), GameplayServiceInterface: GamePlayService(), ComputerManagementServiceInterface:ComputerManagementService()}
         infoObject = pygame.display.Info()
         globals.surface.append(pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN))
+        size = globals.surface[0].get_size()
+        globals.resx.append(size[0])
+        globals.resy.append(size[1])
         globals.services.append(self.serviceCollection[AccountManagementServiceInterface])
         globals.services.append(self.serviceCollection[BoardManagementServiceInterface])
         globals.services.append(self.serviceCollection[GameplayServiceInterface])
