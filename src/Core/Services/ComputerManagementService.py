@@ -71,7 +71,7 @@ class ComputerManagementService(CMSI):
             shotNums = GPS.get_standing_ships(self, selfShips)
         else:
             shotNums = 1
-        place = (random.randint(0, size - 1), random.randint(0, size - 1))
+        place = (random.randint(0, size - 2), random.randint(0, size - 2))
         for i in range(shotNums):
             while shotBoard[place[0]][place[1]] != -1:
                 place = (random.randint(0, size), random.randint(0, size))
