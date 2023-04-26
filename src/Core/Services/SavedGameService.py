@@ -18,7 +18,7 @@ class SavedGameService(object):
         self.games = []
         for i in range(len(self.bs_games)):
             info = self.bs_games[i].split("-")
-            self.games.append(i, info)
+            self.games.append(i, info.strip())
         return self.games
     
     def save_game(self, board):
@@ -82,4 +82,6 @@ class SavedGameService(object):
                         temp.append(data)
                 shotBoard2.append(temp)
                 temp = []
+        #commented for testing reasons
+        #os.remove(fName)
         return size, ship_list, salvo, chain, board1, board2, shotBoard1, shotBoard2
