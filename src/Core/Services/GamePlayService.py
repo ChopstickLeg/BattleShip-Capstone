@@ -11,8 +11,8 @@ class GamePlayService(GMSI):
         end = False
         self.isPlayer1 = not self.isPlayer1
         for item in shots:
-            if shipBoard[item[0]][item[1]] != -1:
-                shipBoard[item[0]][item[1]] = -1
+            if shipBoard[item[0]][item[1]] != 0:
+                shipBoard[item[0]][item[1]] = 0
                 shotBoard[item[0]][item[1]] = 2
             else:
                 shotBoard[item[0]][item[1]] = 1
@@ -25,8 +25,8 @@ class GamePlayService(GMSI):
         end = False
         hasHit = False
         for item in shots:
-            if shipBoard[item[0]][item[1]] != -1:
-                shipBoard[item[0]][item[1]] = -1
+            if shipBoard[item[0]][item[1]] != 0:
+                shipBoard[item[0]][item[1]] = 0
                 shotBoard[item[0]][item[1]] = 2
                 if not hasHit:
                     hasHit = True
@@ -43,6 +43,6 @@ class GamePlayService(GMSI):
         ship_standing = set()
         for x in range(len(shipBoard)):
             for y in range(len(shipBoard)):
-                if shipBoard[y][x] != -1:
+                if shipBoard[y][x] != 0:
                     ship_standing.add(shipBoard[y][x])
         return ship_standing

@@ -3,12 +3,19 @@ import pygame_menu
 from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 from .GameplayScreen import GameplayScreen
+from Core.Services import SavedGameService
 import sys
 
 class SavedGamesScreen(UII):
     def add_elements(self):
         self.saved_games_screen = pygame_menu.Menu("Select a saved game", 100, 200, theme = pygame_menu.themes.THEME_BLUE)
-        self.saved_games_screen.add.button("Saved game from <time> with players <player1> <player2>")
+        service = SavedGameService()
+        game_list = service.get_saved_games()
+        #Implement droplist here for game saves
+        buttonlist = []
+        for item in game_list:
+
+        self.table = self.saved_games_screen.add.table()
         self.saved_games_screen.add.button("Next screen", self.build_gameplay_screen)
         self.on_resize(self.saved_games_screen)
         self.saved_games_screen.enable()

@@ -99,9 +99,9 @@ class ShipPlacementScreen(UII):
     
     def reset_board(self):
         if self.isBoard2:
-            self.board.board2 = [[-1 for x in range(self.num)] for i in range(self.num)]
+            self.board.board2 = [[0 for x in range(self.num)] for i in range(self.num)]
         else:
-            self.board.board1 = [[-1 for x in range(self.num)] for i in range(self.num)]
+            self.board.board1 = [[0 for x in range(self.num)] for i in range(self.num)]
         self.ship_count = [0 for i in range(len(self.board.ship_list))]
         self.last_placed = ()
     
@@ -117,7 +117,7 @@ class ShipPlacementScreen(UII):
         sx, sy = None, None
         if self.selected_square:
             square, sx, sy = self.selected_square
-            if square == -1:
+            if square == 0:
                 if not globals.services[1].verify_placement(board, sy, sx, self.last_placed, self.ship_count[self.selected_ship], self.board.ship_list[self.selected_ship], self.selected_ship):
                     messagebox.showerror("Ship placed improperly", "Ship has been placed in an invalid location, please try again")
                     return
@@ -127,7 +127,7 @@ class ShipPlacementScreen(UII):
                     self.last_placed = (sy, sx)
         for x in range(self.num):
             for y in range(self.num):
-                if board[y][x] != -1:
+                if board[y][x] != 0:
                     s1 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("black"))
                     s2 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("darkgrey"))
                     pos = pygame.Rect(self.board_pos[0] + x * self.tile_size+1, self.board_pos[1] + y * self.tile_size + 1, self.tile_size, self.tile_size)
@@ -156,12 +156,12 @@ class ShipPlacementScreen(UII):
         if self.isBoard2:
             for x in range(self.num):
                 for y in range(self.num):
-                    if self.board.board2[x][y] != -1:
+                    if self.board.board2[x][y] != 0:
                         ship_totals[self.board.board2[x][y]] += 1
         else:
             for x in range(self.num):
                 for y in range(self.num):
-                    if self.board.board1[x][y] != -1:
+                    if self.board.board1[x][y] != 0:
                         ship_totals[self.board.board1[x][y]] += 1
         for i in range(len(ship_totals)):
             if ship_totals[i] != self.board.ship_list[i]:
@@ -199,7 +199,7 @@ class ShipPlacementScreen(UII):
                     quit()
                 if e.type == pygame.MOUSEBUTTONUP:
                     if self.selected_ship != None:
-                        if ship == -1:
+                        if ship == 0:
                             self.selected_square = ship, x, y
 
                     

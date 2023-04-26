@@ -26,6 +26,8 @@ class GameplayScreen(UII):
         self.board2_surf = self.create_board_surf()
         self.standing_ships = self.num
         self.is_end = False
+        if not globals.services[0].isPVP:
+            globals.services[2].isPlayer1 = True
 
 
     def calculate_tile_size(self):
@@ -72,7 +74,7 @@ class GameplayScreen(UII):
                     pygame.quit()
                     quit()
                 if e.type == pygame.MOUSEBUTTONUP:
-                    if ship == -1:
+                    if ship == 0:
                         self.selected_square = ship, x, y
 
                     
@@ -115,7 +117,7 @@ class GameplayScreen(UII):
         globals.surface[0].blit(s, (self.resx / 2 - 100, self.resy / 2 - self.tile_size * (self.num / 2) - 50))
         for x in range(self.num):
             for y in range(self.num):
-                if board[y][x] != -1:
+                if board[y][x] != 0:
                     s1 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("black"))
                     s2 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("darkgrey"))
                     pos = pygame.Rect(self.board1pos[0] + x * self.tile_size+1, self.board1pos[1] + y * self.tile_size + 1, self.tile_size, self.tile_size)
@@ -177,7 +179,7 @@ class GameplayScreen(UII):
         self.standing_ships = globals.services[2].get_standing_ships(shipRemainingBoard)
         for x in range(self.num):
             for y in range(self.num):
-                if board[y][x] == 0:
+                if board[y][x] == -1:
                     shots.append([y, x])
         if self.board.salvo and len(shots) != len(self.standing_ships):
             messagebox.showerror("Invalid number of shots", "The number of shots you attempted to fire is invalid given your chosen settings, please try again")
@@ -206,11 +208,11 @@ class GameplayScreen(UII):
             board = self.board.shotBoard2
         for x in range(self.num):
             for y in range(self.num):
-                if board[x][y] == 0:
-                    board[x][y] = -1
+                if board[x][y] == -1:
+                    board[x][y] = 0
     
     def build_pause_screen(self):
-        self.pause_screen = PauseScreen()
+        self.pause_screen = PauseScreen(self.board)
         self.pause_screen.add_elements()
     
     def build_endgame_screen(self):
