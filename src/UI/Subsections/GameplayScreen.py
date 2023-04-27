@@ -110,7 +110,7 @@ class GameplayScreen(UII):
             pygame.display.update()
 
             pygame.display.flip()
-            self.clock.tick(30)
+            self.clock.tick(15)
             self.selected_square = None
 
     def draw_ships(self, board):

@@ -35,6 +35,7 @@ class AccountsScreens(UII):
         self.mode_selection_screen.add.button("Player v Player", self.add_login_elements)
         self.mode_selection_screen.add.button("Player v Computer", self.build_rule_selection_screen)
         self.mode_selection_screen.add.button("Resume Game", self.build_saved_games_screen)
+        self.mode_selection_screen.add.button("View Leaderboard")
         self.mode_selection_screen.add.button("Quit Application", pygame_menu.events.EXIT)
         self.mode_selection_screen.enable()
         self.run_screen(self.mode_selection_screen)
