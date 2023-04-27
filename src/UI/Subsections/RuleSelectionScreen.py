@@ -62,5 +62,5 @@ class RuleSelectionScreen(UII):
         ship4 = int(ship4[0])
         ship3 = int(ship3[0])
         ship2 = int(ship2[0])
-        self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, globals.account1[0], globals.account2[0], salvo, chain)
+        self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, salvo, chain)
         self.build_ship_placement_screen()

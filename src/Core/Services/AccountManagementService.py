@@ -42,7 +42,11 @@ class AccountManagementService(AMSI):
         elif self.logged_in2 == None:
             self.logged_in2 = self.getAccount(out[0][0])
             return self.logged_in2
-        
+    
+    def getAccountByUser(self, user):
+        self.c.execute("""SELECT Key FROM Accounts WHERE Username = ?""", (user, ))
+        out = self.c.fetchall()
+        return self.getAccount(out[0][0])
     
     def recordWin(self, id):
         acct = self.getAccount(id)

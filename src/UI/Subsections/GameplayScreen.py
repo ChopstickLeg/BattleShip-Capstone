@@ -26,6 +26,10 @@ class GameplayScreen(UII):
         self.board2_surf = self.create_board_surf()
         self.standing_ships = self.num
         self.is_end = False
+        if globals.account2[0].user == "Computer":
+            globals.services[0].isPVP = False
+        else:
+            globals.services[0].isPVP = True
         if not globals.services[0].isPVP:
             globals.services[2].isPlayer1 = True
 
@@ -127,9 +131,9 @@ class GameplayScreen(UII):
     def draw_hits(self):
         if self.selected_square:
             if globals.services[2].isPlayer1:
-                self.board.shotBoard1[self.selected_square[2]][self.selected_square[1]] = 0
+                self.board.shotBoard1[self.selected_square[2]][self.selected_square[1]] = 3
             else:
-                self.board.shotBoard2[self.selected_square[2]][self.selected_square[1]] = 0
+                self.board.shotBoard2[self.selected_square[2]][self.selected_square[1]] = 3
 
         for x in range(self.num):
             for y in range(self.num):
@@ -157,10 +161,10 @@ class GameplayScreen(UII):
                 if self.board.shotBoard1[y][x] == 2 and not globals.services[2].isPlayer1:
                     center = [x * self.tile_size + self.board1pos[0] + (self.tile_size / 2), y * self.tile_size + self.board1pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], (255, 0, 0), center, self.tile_size / 2 - 5)
-                if self.board.shotBoard1[y][x] == 0:
+                if self.board.shotBoard1[y][x] == 3:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
-                if self.board.shotBoard2[y][x] == 0:
+                if self.board.shotBoard2[y][x] == 3:
                     center = [x * self.tile_size + self.board2pos[0] + (self.tile_size / 2), y * self.tile_size + self.board2pos[1] + (self.tile_size / 2)]
                     pygame.draw.circle(globals.surface[0], pygame.color.Color("grey"), center, self.tile_size / 2 - 5)
     
@@ -179,7 +183,7 @@ class GameplayScreen(UII):
         self.standing_ships = globals.services[2].get_standing_ships(shipRemainingBoard)
         for x in range(self.num):
             for y in range(self.num):
-                if board[y][x] == -1:
+                if board[y][x] == 3:
                     shots.append([y, x])
         if self.board.salvo and len(shots) != len(self.standing_ships):
             messagebox.showerror("Invalid number of shots", "The number of shots you attempted to fire is invalid given your chosen settings, please try again")
@@ -196,6 +200,8 @@ class GameplayScreen(UII):
             tScreen.run_screen()
         elif not globals.services[0].isPVP:
             self.standing_ships, self.is_end = globals.services[2].fire(shots, board, shipBoard)
+            if self.is_end:
+                self.build_endgame_screen()
             self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
             while hit and self.board.chain:
                 self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
@@ -208,7 +214,7 @@ class GameplayScreen(UII):
             board = self.board.shotBoard2
         for x in range(self.num):
             for y in range(self.num):
-                if board[x][y] == -1:
+                if board[x][y] == 3:
                     board[x][y] = 0
     
     def build_pause_screen(self):

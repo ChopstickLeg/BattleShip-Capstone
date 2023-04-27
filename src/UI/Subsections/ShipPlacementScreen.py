@@ -122,14 +122,14 @@ class ShipPlacementScreen(UII):
                     messagebox.showerror("Ship placed improperly", "Ship has been placed in an invalid location, please try again")
                     return
                 else:
-                    board[sy][sx] = self.selected_ship
+                    board[sy][sx] = self.selected_ship + 1
                     self.ship_count[self.selected_ship] += 1
                     self.last_placed = (sy, sx)
         for x in range(self.num):
             for y in range(self.num):
                 if board[y][x] != 0:
-                    s1 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("black"))
-                    s2 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("darkgrey"))
+                    s1 = self.font.render("s" + str(board[y][x]), True, pygame.Color("black"))
+                    s2 = self.font.render("s" + str(board[y][x]), True, pygame.Color("darkgrey"))
                     pos = pygame.Rect(self.board_pos[0] + x * self.tile_size+1, self.board_pos[1] + y * self.tile_size + 1, self.tile_size, self.tile_size)
                     globals.surface[0].blit(s2, s2.get_rect(center = pos.center).move(1, 1))
                     globals.surface[0].blit(s1, s1.get_rect(center = pos.center))
@@ -157,12 +157,12 @@ class ShipPlacementScreen(UII):
             for x in range(self.num):
                 for y in range(self.num):
                     if self.board.board2[x][y] != 0:
-                        ship_totals[self.board.board2[x][y]] += 1
+                        ship_totals[self.board.board2[x][y] - 1] += 1
         else:
             for x in range(self.num):
                 for y in range(self.num):
                     if self.board.board1[x][y] != 0:
-                        ship_totals[self.board.board1[x][y]] += 1
+                        ship_totals[self.board.board1[x][y] - 1] += 1
         for i in range(len(ship_totals)):
             if ship_totals[i] != self.board.ship_list[i]:
                 messagebox.showerror("Not enough ships placed", "Please place all ships before continuing")

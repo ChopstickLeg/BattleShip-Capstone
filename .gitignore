@@ -6,3 +6,4 @@ BattleshipDB.db
 src/UI/Subsections/__pycache__
 src/UI/Subsections/tst.py
 Saved_Games
+BattleshipDB.db-journal

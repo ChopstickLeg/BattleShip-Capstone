@@ -79,6 +79,6 @@ class ComputerManagementService(CMSI):
                 shotBoard[place[0]][place[1]] = 2
                 shipBoard[place[0]][place[1]] = 0
                 hit = True
-        if GPS.get_standing_ships(self, shipBoard) == 0:
+        if len(GPS.get_standing_ships(self, shipBoard)) == 0:
             end = True
         return shotBoard, shipBoard, hit, end

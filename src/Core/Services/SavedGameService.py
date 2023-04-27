@@ -11,14 +11,14 @@ class SavedGameService(object):
             self.file_list = []
         self.bs_games = []
         for item in self.file_list:
-            if item[:-4] == ".txt":
+            if item[-4:] == ".txt":
                 self.bs_games.append(item)
     
     def get_saved_games(self):
         self.games = []
         for i in range(len(self.bs_games)):
             info = self.bs_games[i].split("-")
-            self.games.append(i, info.strip())
+            self.games.append((i, info))
         return self.games
     
     def save_game(self, board):
@@ -30,10 +30,13 @@ class SavedGameService(object):
                       + "\n" + str(board.chain) + '\n')
             for item in board.board1:
                 out.write(str(item) + ".")
+            out.write("\n")
             for item in board.board2:
                 out.write(str(item) + ".")
+            out.write("\n")
             for item in board.shotBoard1:
                 out.write(str(item) + ".")
+            out.write("\n")
             for item in board.shotBoard2:
                 out.write(str(item) + ".")
     
@@ -50,38 +53,93 @@ class SavedGameService(object):
         fName = ""
         for item in file_info:
             fName += item + "-"
-        fName = fName[:-1] + ".txt"
+        fName = fName[:-1]
+        fName = os.path.join(self.path, fName)
         with open(fName, "r") as f:
             size = int(f.readline().strip())
             for char in f.readline().split(","):
                 if char.isdigit():
                     ship_list.append(int(char))
-            salvo = bool(f.readline().strip())
-            chain = bool(f.readline().strip())
+            salvo = f.readline().strip()
+            if salvo == "True":
+                salvo = True
+            else:
+                salvo = False
+            chain = f.readline().strip()
+            if chain == "True":
+                chain = True
+            else:
+                chain = False
             for char in f.readline().split("."):
-                for data in char.split(","):
-                    if data.isdigit():
+                for data in char.split(", "):
+                    try:
+                        if "[" in data:
+                            temp.append(int(data[1]))
+                        elif "]" in data:
+                            temp.append(int(data[0]))
+                        data = int(data)
                         temp.append(data)
+                    except ValueError:
+                        pass
                 board1.append(temp)
                 temp = []
             for char in f.readline().split("."):
-                for data in char.split(","):
-                    if data.isdigit():
+                for data in char.split(", "):
+                    try:
+                        if "[" in data:
+                            temp.append(int(data[1]))
+                        elif "]" in data:
+                            temp.append(int(data[0]))
+                        data = int(data)
                         temp.append(data)
+                    except ValueError:
+                        pass
                 board2.append(temp)
                 temp = []
             for char in f.readline().split("."):
-                for data in char.split(","):
-                    if data.isdigit():
+                for data in char.split(", "):
+                    try:
+                        if "[" in data:
+                            temp.append(int(data[1]))
+                        elif "]" in data:
+                            temp.append(int(data[0]))
+                        data = int(data)
                         temp.append(data)
+                    except ValueError:
+                        pass
                 shotBoard1.append(temp)
                 temp = []
             for char in f.readline().split("."):
-                for data in char.split(","):
-                    if data.isdigit():
+                for data in char.split(", "):
+                    try:
+                        if "[" in data:
+                            temp.append(int(data[1]))
+                        elif "]" in data:
+                            temp.append(int(data[0]))
+                        data = int(data)
                         temp.append(data)
+                    except ValueError:
+                        pass
                 shotBoard2.append(temp)
                 temp = []
         #commented for testing reasons
         #os.remove(fName)
         return size, ship_list, salvo, chain, board1, board2, shotBoard1, shotBoard2
+    
+    def resume_game(self, size, ship_list, salvo, chain, board1, board2, shotBoard1, shotBoard2):
+        ship5 = 0
+        ship4 = 0
+        ship3 = 0
+        ship2 = 0
+        for item in ship_list:
+            item = int(item)
+            if item == 5:
+                ship5 += 1
+            if item == 4:
+                ship4 += 1
+            if item == 3:
+                ship3 += 1
+            if item == 2:
+                ship2 += 1
+        board = Board(size, ship5, ship4, ship3, ship2, salvo, chain, board1[:-1], board2[:-1], shotBoard1[:-1], shotBoard2[:-1])
+        return board
