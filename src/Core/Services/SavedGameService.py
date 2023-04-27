@@ -122,8 +122,7 @@ class SavedGameService(object):
                         pass
                 shotBoard2.append(temp)
                 temp = []
-        #commented for testing reasons
-        #os.remove(fName)
+        os.remove(fName)
         return size, ship_list, salvo, chain, board1, board2, shotBoard1, shotBoard2
     
     def resume_game(self, size, ship_list, salvo, chain, board1, board2, shotBoard1, shotBoard2):
