@@ -20,10 +20,10 @@ class SavedGamesScreen(UII):
                 self.dropdown.append((item[1][0] + " and " + item[1][1] + " Played at: " + item[1][5] + ":" + item[1][6][:-4] + " on " + item[1][3] + "/" + item[1][4] + "/" + item[1][2], item[0]))
         if len(self.dropdown) == 0:
             self.saved_games_screen.add.label("No saved games to display")
+            self.saved_games_screen.add.button("Exit", pygame_menu.events.EXIT)
         else:
             self.drop = self.saved_games_screen.add.dropselect("Select a saved game", items=self.dropdown, placeholder="Please select from one of the saved games in the dropdown", selection_box_width = 0)
-
-        self.saved_games_screen.add.button("Next screen", self.build_gameplay_screen)
+            self.saved_games_screen.add.button("Resume Game", self.build_gameplay_screen)
         self.saved_games_screen.enable()
         self.run_screen(self.saved_games_screen)
     
