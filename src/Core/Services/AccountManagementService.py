@@ -52,7 +52,17 @@ class AccountManagementService(AMSI):
         acct = self.getAccount(id)
         self.c.execute("""UPDATE Accounts SET GamesPlayed = ?, GamesWon = ? WHERE Key = ?""", (acct.gamesPlayed + 1, acct.gamesWon + 1, id))
         globals.game_winner.append(self.getAccount(id))
+        self.conn.commit()
 
     def recordLoss(self, id):
         acct = self.getAccount(id)
         self.c.execute("""UPDATE Accounts SET GamesPlayed = ? WHERE Key = ?""", (acct.gamesPlayed + 1, id))
+        self.conn.commit()
+    
+    def getAccounts(self):
+        output = []
+        self.c.execute("""SELECT Key FROM Accounts""")
+        out = self.c.fetchall()
+        for item in out:
+            output.append(self.getAccount(item[0]))
+        return output

@@ -112,6 +112,8 @@ class GameplayScreen(UII):
             pygame.display.flip()
             self.clock.tick(15)
             self.selected_square = None
+            if len(globals.rematch) == 1 or len(globals.return_to_login):
+                return
 
     def draw_ships(self, board):
         if globals.services[2].isPlayer1:

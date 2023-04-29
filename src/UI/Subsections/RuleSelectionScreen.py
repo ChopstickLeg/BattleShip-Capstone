@@ -15,12 +15,19 @@ class RuleSelectionScreen(UII):
             self.rule_selection_screen.add.label("Logged in users: " + globals.account1[0].user + " " + globals.account2[0].user)
         else:
             self.rule_selection_screen.add.label("Logged in user: " + globals.account1[0].user)
-        self.board_size = self.rule_selection_screen.add.dropselect(title = "Select Board Size", items = [('7 x 7', 7), ("8 x 8", 8), ('9 x 9', 9), ('10 x 10', 10), ('11 x 11', 11), ('12 x 12', 12), ('13 x 13', 13)])
-        #add restrictions to these based on board size?
-        self.ship5 = self.rule_selection_screen.add.dropselect(title = "Select number of 5 length ships", items = ["1", "2", "3"])
-        self.ship4 = self.rule_selection_screen.add.dropselect(title = "Select number of 4 length ships", items = ["1", "2", "3", "4"])
-        self.ship3 = self.rule_selection_screen.add.dropselect(title = "Select number of 3 length ships", items = ["1", "2", "3", "4", "5"])
-        self.ship2 = self.rule_selection_screen.add.dropselect(title = "Select numebr of 2 length ships", items = ["1", "2", "3", "4", "5", "6"])
+        self.board_size = self.rule_selection_screen.add.dropselect(title = "Select Board Size", items = [('7 x 7', 7), ("8 x 8", 8), ('9 x 9', 9), ('10 x 10', 10), ('11 x 11', 11)], onchange=self.update_size) 
+        self.options5 = ["1", "2"]
+        self.options4 = ["1", "2", "3"]
+        self.options3 = ["1", "2", "3"]
+        self.options2 = ["1", "2", "3", "4"]
+        self.ship5 = self.rule_selection_screen.add.dropselect(title = "Select number of 5 length ships", items = self.options5)
+        self.ship5.set_controls(mouse = False, keyboard = False)
+        self.ship4 = self.rule_selection_screen.add.dropselect(title = "Select number of 4 length ships", items = self.options4)
+        self.ship4.set_controls(mouse = False, keyboard = False)
+        self.ship3 = self.rule_selection_screen.add.dropselect(title = "Select number of 3 length ships", items = self.options3)
+        self.ship3.set_controls(mouse = False, keyboard = False)
+        self.ship2 = self.rule_selection_screen.add.dropselect(title = "Select numebr of 2 length ships", items = self.options2)
+        self.ship2.set_controls(mouse = False, keyboard = False)
         self.salvo_toggle = self.rule_selection_screen.add.toggle_switch(title="Salvo Mode", onchange=self.check_salvo_mode)
         self.chain_toggle = self.rule_selection_screen.add.toggle_switch(title="Chain hits", onchange=self.check_chain_mode)
         self.rule_selection_screen.add.button("Place your ships", self.create_board)
@@ -64,3 +71,28 @@ class RuleSelectionScreen(UII):
         ship2 = int(ship2[0])
         self.board = globals.services[1].generate_board(board_size[0][1], ship5, ship4, ship3, ship2, salvo, chain)
         self.build_ship_placement_screen()
+    
+    def update_size(self, arg1, arg2):
+        size = self.board_size.get_value()
+        self.ship5.set_controls(mouse = True, keyboard = True)
+        self.ship4.set_controls(mouse = True, keyboard = True)
+        self.ship3.set_controls(mouse = True, keyboard = True)
+        self.ship2.set_controls(mouse = True, keyboard = True)
+        if size[0][1] < 9:
+            self.options5 = ["1"]
+            self.ship5.update_items(self.options5)
+            self.options4 = ["1", "2"]
+            self.ship4.update_items(self.options4)
+            self.options3 = ["1", "2"]
+            self.ship3.update_items(self.options3)
+            self.options2 = ["1", "2"]
+            self.ship2.update_items(self.options2)
+        else:
+            self.options5 = ["1", "2"]
+            self.ship5.update_items(self.options5)
+            self.options4 = ["1", "2", "3"]
+            self.ship4.update_items(self.options4)
+            self.options3 = ["1", "2", "3"]
+            self.ship3.update_items(self.options3)
+            self.options2 = ["1", "2", "3", "4"]
+            self.ship2.update_items(self.options2)

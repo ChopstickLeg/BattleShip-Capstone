@@ -42,7 +42,6 @@ class ShipPlacementScreen(UII):
     
     def calculate_button_nums(self):
         if len(self.board.ship_list) > 5:
-            #Need to add touchups to the rule selection screen so that it limits the number of possible ships
             wide = 2
             long = len(self.board.ship_list) // 2 + len(self.board.ship_list) % 2
         else:
@@ -67,11 +66,15 @@ class ShipPlacementScreen(UII):
         tmp = []
         for i in range(len(self.board.ship_list)):
             tmp.append("Ship " + str(i + 1) + " length: " + str(self.board.ship_list[i]))
+        if len(self.board.ship_list) > 5 and len(self.board.ship_list) % 2 != 0:
+            tmp.append("Placeholder, do not click")
         return tuple(tmp)
     def get_ship_fn(self):
         tmp = []
         for i in range(len(self.board.ship_list)):
             tmp.append(partial(self.change_selected, i))
+        if len(self.board.ship_list) > 5 and len(self.board.ship_list) % 2 != 0:
+            tmp.append(partial(self.change_selected, None))
         return tuple(tmp)
 
     def create_board_surf(self):
@@ -89,9 +92,9 @@ class ShipPlacementScreen(UII):
         #Fix index error for odd number of ships here
         self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (self.buttons_long, self.buttons_wide), border = 10, texts = self.ship_button_txt,
                                             onClicks = self.ship_button_fn_list)
-        self.exit_button = Button(button_surf, self.resx - 100, 0, 100, 100, text = "X", onClick = lambda: quit())
-        self.next_screen = Button(button_surf, self.resx - 100, self.resy - 100, 100, 100, text = "Next", onClick = self.build_next_screen)
-        self.reset_board_button = Button(button_surf, 0, self.resy - 100, 100, 100, text = "Reset Board", onClick = self.reset_board)
+        self.exit_button = Button(button_surf, self.resx - 50, 0, 50, 50, text = "X", onClick = lambda: quit())
+        self.next_screen = Button(button_surf, self.resx - 100, self.resy - 50, 100, 50, text = "Next", onClick = self.build_next_screen)
+        self.reset_board_button = Button(button_surf, 0, self.resy - 50, 100, 50, text = "Reset Board", onClick = self.reset_board)
         return button_surf
     
     def change_selected(self, num):
@@ -227,3 +230,5 @@ class ShipPlacementScreen(UII):
             pygame.display.flip()
             self.clock.tick(60)
             self.selected_square = None
+            if len(globals.rematch) == 1 or len(globals.return_to_login):
+                return

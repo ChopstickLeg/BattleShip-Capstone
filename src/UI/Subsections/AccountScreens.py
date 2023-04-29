@@ -4,6 +4,7 @@ from tkinter import messagebox
 from .UI_Interface import UI_Interface as UII
 from .RuleSelectionScreen import RuleSelectionScreen
 from .SavedGameScreen import SavedGamesScreen
+from .LeaderboardScreen import LeaderboardScreen
 import sqlite3
 from Core.Data import globals
 from Core.Data import Account
@@ -35,7 +36,7 @@ class AccountsScreens(UII):
         self.mode_selection_screen.add.button("Player v Player", self.add_login_elements)
         self.mode_selection_screen.add.button("Player v Computer", self.build_rule_selection_screen)
         self.mode_selection_screen.add.button("Resume Game", self.build_saved_games_screen)
-        self.mode_selection_screen.add.button("View Leaderboard")
+        self.mode_selection_screen.add.button("View Leaderboard", self.build_leaderboard)
         self.mode_selection_screen.add.button("Quit Application", pygame_menu.events.EXIT)
         self.mode_selection_screen.enable()
         self.run_screen(self.mode_selection_screen)
@@ -88,3 +89,7 @@ class AccountsScreens(UII):
             self.create_user_input.clear()
             self.run_screen(self.create_account_screen)
         self.add_login_elements()
+    
+    def build_leaderboard(self):
+        self.leaderboard = LeaderboardScreen()
+        self.leaderboard.add_elements()
