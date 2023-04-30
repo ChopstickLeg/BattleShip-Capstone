@@ -24,6 +24,7 @@ class SavedGamesScreen(UII):
         else:
             self.drop = self.saved_games_screen.add.dropselect("Select a saved game", items=self.dropdown, placeholder="Please select from one of the saved games in the dropdown", selection_box_width = 0)
             self.saved_games_screen.add.button("Resume Game", self.build_gameplay_screen)
+            self.saved_games_screen.add.button("Exit", pygame_menu.events.EXIT)
         self.saved_games_screen.enable()
         self.run_screen(self.saved_games_screen)
     

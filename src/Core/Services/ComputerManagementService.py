@@ -70,9 +70,9 @@ class ComputerManagementService(CMSI):
         if salvo:
             shotNums = GPS.get_standing_ships(self, selfShips)
         else:
-            shotNums = 1
+            shotNums = [1]
         place = (random.randint(0, len(shotBoard[0]) - 1), random.randint(0, len(shotBoard[0]) - 1))
-        for i in range(shotNums):
+        for i in range(len(shotNums)):
             while shotBoard[place[0]][place[1]] != 0:
                 place = (random.randint(0, size - 1), random.randint(0, size - 1))
             if shipBoard[place[0]][place[1]] == 0:

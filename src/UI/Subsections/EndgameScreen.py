@@ -18,7 +18,6 @@ class EndgameScreen(UII):
         globals.game_winner.clear()
         globals.rematch.append(True)
         
-    
     def return_to_login(self):
         globals.game_winner.clear()
         globals.account1.clear()

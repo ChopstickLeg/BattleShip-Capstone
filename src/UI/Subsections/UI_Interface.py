@@ -19,7 +19,6 @@ class UI_Interface(ABC):
             menu.draw(globals.surface[0])
             pygame.display.flip()
             if menu.get_title() != "Select Your Rules" and len(globals.rematch) == 1:
-                globals.rematch.clear()
                 return
             if menu.get_title() == "Select Your Rules" and len(globals.rematch) == 1:
                 globals.rematch.clear()

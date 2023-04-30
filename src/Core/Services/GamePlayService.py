@@ -8,36 +8,20 @@ class GamePlayService(GMSI):
             self.isPlayer1 = False
     
     def fire(self, shots, shotBoard, shipBoard):
+        hit = False
         end = False
         self.isPlayer1 = not self.isPlayer1
         for item in shots:
             if shipBoard[item[0]][item[1]] != 0:
                 shipBoard[item[0]][item[1]] = 0
                 shotBoard[item[0]][item[1]] = 2
+                hit = True
             else:
                 shotBoard[item[0]][item[1]] = 1
         ship_standing = self.get_standing_ships(shipBoard)
         if len(ship_standing) == 0:
             end = True
-        return ship_standing, end
-    
-    def chain_fire(self, shots, shotBoard, shipBoard):
-        end = False
-        hasHit = False
-        for item in shots:
-            if shipBoard[item[0]][item[1]] != 0:
-                shipBoard[item[0]][item[1]] = 0
-                shotBoard[item[0]][item[1]] = 2
-                if not hasHit:
-                    hasHit = True
-            else:
-                shotBoard[item[0]][item[1]] = 1
-        if not hasHit:
-            self.isPlayer1 = not self.isPlayer1
-        ship_standing = self.get_standing_ships(shipBoard)
-        if len(ship_standing) == 0:
-            end = True
-        return ship_standing, end
+        return ship_standing, end, hit
     
     def get_standing_ships(self, shipBoard):
         ship_standing = set()

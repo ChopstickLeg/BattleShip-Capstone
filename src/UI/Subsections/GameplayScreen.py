@@ -112,7 +112,7 @@ class GameplayScreen(UII):
             pygame.display.flip()
             self.clock.tick(15)
             self.selected_square = None
-            if len(globals.rematch) == 1 or len(globals.return_to_login):
+            if len(globals.rematch) == 1 or len(globals.return_to_login) == 1:
                 return
 
     def draw_ships(self, board):
@@ -193,21 +193,24 @@ class GameplayScreen(UII):
         if not self.board.salvo and len(shots) != 1:
             messagebox.showerror("Invalid number of shots", "The number of shots you attempted to fire is invalid given your chosen settings, please try again")
             self.run_screen()
-        if self.board.chain:
-            self.standing_ships, self.is_end = globals.services[2].chain_fire(shots, board, shipBoard)
-        elif not self.board.chain and globals.services[0].isPVP:
-            self.standing_ships, self.is_end = globals.services[2].fire(shots, board, shipBoard)
+        elif globals.services[0].isPVP:
+            self.standing_ships, self.is_end, hit = globals.services[2].fire(shots, board, shipBoard)
+            if hit and self.board.chain:
+                globals.services[2].isPlayer1 = startP1
         if startP1 != globals.services[2].isPlayer1 and not self.is_end and globals.services[0].isPVP:
             tScreen = TransitionScreen()
             tScreen.run_screen()
         elif not globals.services[0].isPVP:
-            self.standing_ships, self.is_end = globals.services[2].fire(shots, board, shipBoard)
+            self.standing_ships, self.is_end, hit = globals.services[2].fire(shots, board, shipBoard)
             if self.is_end:
                 self.build_endgame_screen()
+            if hit and self.board.chain:
+                globals.services[2].isPlayer1 = True
+                return
             self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
             while hit and self.board.chain:
                 self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
-            globals.services[2].isPlayer1 = not globals.services[2].isPlayer1
+            globals.services[2].isPlayer1 = True
 
     def reset_shot(self):
         if globals.services[2].isPlayer1:
