@@ -1,4 +1,4 @@
-from UI import BattleshipUI as BSUI
+from .UI import BattleshipUI as BSUI
 import os
 
 class Startup(object):
