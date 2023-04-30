@@ -32,7 +32,7 @@ class ComputerManagementService(CMSI):
                     cords = (-1, 0)
                 else:
                     cords = (0, -1)
-                while count < ships[i]:
+                while count < ships[i] - 1:
                     if len(attempted) == 4:
                         for x in range(size):
                             for y in range(size):
@@ -41,13 +41,13 @@ class ComputerManagementService(CMSI):
                         recurse = True
                         break
                     count += 1
-                    if current[0] + cords[0] < size and current[1] + cords[1] < size and board[current[0] + cords[0]][current[1] + cords[1]] == 0:
+                    if current[0] + cords[0] < size and current[1] + cords[1] < size and board[current[0] + cords[0]][current[1] + cords[1]] == 0 and current[0] + cords[0] > 0 and current[1] + cords[1] > 0:
                         current = tuple(map(lambda x, y: x+y, current, cords))
                         board[current[0]][current[1]] = i + 1
                     else:
                         attempted.append(direction)
-                        for n in range(count):
-                            board[current[0] + -1 * (cords[0] * n)][current[1] + -1 * (cords[1] * n)] = -1
+                        for n in range(count - 1):
+                            board[current[0] + -1 * (cords[0] * n)][current[1] + -1 * (cords[1] * n)] = 0
                         while direction in attempted and len(attempted) != 4:
                             direction = random.randint(1, 4)
                         if direction == 1:
@@ -60,6 +60,8 @@ class ComputerManagementService(CMSI):
                             cords = (0, -1)
                         count = 0
                         current = start
+                if recurse:
+                    break
         return board
     
     def fire(self, shipBoard, selfShips, shotBoard, size, salvo):
