@@ -18,21 +18,21 @@ class PauseScreen(UII):
         self.pause_screen.add.button("Save & quit", self.save_game)
         self.pause_screen.add.button("Quit application", pygame_menu.events.EXIT)
         self.pause_screen.enable()
-        self.run_screen(self.pause_screen)
+        self.run_screen()
     def swap_flag(self):
         self.return_flag = True
     def save_game(self):
         self.sgs.save_game(self.board)
         sys.exit(0)
-    def run_screen(self, menu):
+    def run_screen(self):
         while True:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     break
-            menu.update(events)
-            menu.draw(globals.surface[0])
+            self.pause_screen.update(events)
+            self.pause_screen.draw(globals.surface[0])
             pygame.display.flip()
             if self.return_flag:
                 return

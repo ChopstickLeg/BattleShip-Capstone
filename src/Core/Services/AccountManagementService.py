@@ -16,10 +16,8 @@ class AccountManagementService(AMSI):
         self.isPVP = False
 
     def createAccount(self, user, passwd):
-        newAccount = Account(user, passwd)
         self.c.execute("""INSERT INTO Accounts (Username, Password, GamesPlayed, GamesWon) VALUES (?, ?, ?, ?)""", (user, passwd, 0, 0))
         self.conn.commit()
-        return newAccount
     
     def getAccount(self, id):
         self.c.execute("""SELECT Username FROM Accounts WHERE Key = ?""", (id, ))
@@ -36,10 +34,10 @@ class AccountManagementService(AMSI):
     def loginAccount(self, user, passwd):
         self.c.execute("""SELECT Key FROM Accounts WHERE Username = ? AND Password = ?""", (user, passwd))
         out = self.c.fetchall()
-        if self.logged_in1 == None:
+        if len(globals.account1) != 1:
             self.logged_in1 = self.getAccount(out[0][0])
             return self.logged_in1
-        elif self.logged_in2 == None:
+        elif len(globals.account2) != 1:
             self.logged_in2 = self.getAccount(out[0][0])
             return self.logged_in2
     

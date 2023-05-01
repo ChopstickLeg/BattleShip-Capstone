@@ -1,5 +1,5 @@
 def init():
-    global surface, resx, resy, account1, account2, services, game_winner, rules, rematch, return_to_login
+    global surface, resx, resy, account1, account2, services, game_winner, rematch, return_to_login
     surface = []
     resx = []
     resy = []
@@ -7,6 +7,5 @@ def init():
     account2 = []
     services = []
     game_winner = []
-    rules = []
     rematch = []
     return_to_login = []

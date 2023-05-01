@@ -14,7 +14,7 @@ class LeaderboardScreen(UII):
         self.leaderboard.enable()
         self.add_lb_items()
         self.lb_table.update_cell_style(-1, -1, align = "align-center", border_color = "black")
-        self.run_screen(self.leaderboard)
+        self.run_screen()
     
     def swap_flag(self):
         self.return_flag = True
@@ -24,19 +24,19 @@ class LeaderboardScreen(UII):
         tb_out = []
         for item in table:
             tb_out.append([item.user, item.gamesWon, item.gamesPlayed])
-        tb_out = sorted(tb_out, key=lambda wins: tb_out[1])
+        tb_out.sort(key=lambda x: x[1], reverse= True)
         for i in range(len(tb_out)):
-            self.lb_table.add_row([str(i), str(tb_out[i][0]), str(tb_out[i][1]), str(tb_out[i][2])])
+            self.lb_table.add_row([str(i + 1), str(tb_out[i][0]), str(tb_out[i][1]), str(tb_out[i][2])])
     
-    def run_screen(self, menu):
+    def run_screen(self):
         while True:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     break
-            menu.update(events)
-            menu.draw(globals.surface[0])
+            self.leaderboard.update(events)
+            self.leaderboard.draw(globals.surface[0])
             pygame.display.flip()
             if self.return_flag:
                 return

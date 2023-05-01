@@ -22,6 +22,5 @@ class EndgameScreen(UII):
         globals.game_winner.clear()
         globals.account1.clear()
         globals.account2.clear()
-        globals.rules.clear()
         globals.return_to_login.append(True)
         

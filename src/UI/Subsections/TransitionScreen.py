@@ -18,12 +18,11 @@ class TransitionScreen(UII):
                 if e.type == pygame.MOUSEBUTTONDOWN:
                     return
             globals.surface[0].fill(pygame.Color("black"))
-            resx, resy = globals.surface[0].get_size()
-            txtLocation = (resx / 2 - 240, resy - 30)
+            txtLocation = (globals.resx[0] / 2 - 240, globals.resy[0] - 30)
             s = self.font.render("Please switch players now, to dismiss this screen, press any button", True, pygame.Color("white"))
             if self.txt != "":
                 s1 = self.font.render(self.txt, True, pygame.Color("white"))
-                globals.surface[0].blit(s1, (resx / 2 - 40, resy / 2))
+                globals.surface[0].blit(s1, (globals.resx[0] / 2 - 40, globals.resy[0] / 2))
             globals.surface[0].blit(s, txtLocation)
             pygame.display.flip()
             self.clock.tick(60)

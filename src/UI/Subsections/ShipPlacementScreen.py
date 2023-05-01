@@ -15,13 +15,12 @@ class ShipPlacementScreen(UII):
         super().__init__()
         self.board = board
         self.isBoard2 = False
-        self.resx, self.resy = globals.surface[0].get_size()
         self.smallest = self.get_smallest()
         self.border = 50
         self.num = board.size
         self.tile_size = self.calculate_tile_size()
-        self.board_pos = [(self.resx / 2) - self.tile_size * (self.num / 2), (self.resy / 2) - self.tile_size * (self.num / 2) - 50]
-        self.button_pos = [self.board_pos[0], self.resy / 2 + (self.tile_size * (self.num / 2)) - 50]
+        self.board_pos = [(globals.resx[0] / 2) - self.tile_size * (self.num / 2), (globals.resy[0] / 2) - self.tile_size * (self.num / 2) - 50]
+        self.button_pos = [self.board_pos[0], globals.resy[0] / 2 + (self.tile_size * (self.num / 2)) - 50]
         self.titleFont = pygame.font.SysFont("", 60)
         self.font = pygame.font.SysFont('', 32)
         self.ship_button_txt = self.get_ship_button_txt()
@@ -35,7 +34,6 @@ class ShipPlacementScreen(UII):
         self.selected_square = None
         self.ship_count = [0 for i in range(len(board.ship_list))]
         self.last_placed = ()
-        self.drop_pos = None
     
     def add_elements(self):
         self.run_screen()
@@ -50,10 +48,10 @@ class ShipPlacementScreen(UII):
         return wide, long
     
     def get_smallest(self):
-        if self.resx >= self.resy:
-            return self.resy
+        if globals.resx[0] >= globals.resy[0]:
+            return globals.resy[0]
         else:
-            return self.resx
+            return globals.resx[0]
     
     def calculate_tile_size(self):
         tSize = (self.smallest - self.border * 2 - 100) / self.num
@@ -87,14 +85,14 @@ class ShipPlacementScreen(UII):
         return board_surf
     
     def create_button_surf(self):
-        button_surf = pygame.surface.Surface((self.resx, self.resy))
+        button_surf = pygame.surface.Surface((globals.resx[0], globals.resy[0]))
         button_surf.fill((228, 230, 246))
         #Fix index error for odd number of ships here
         self.ship_button_list = ButtonArray(button_surf, self.button_pos[0], self.button_pos[1], self.tile_size * self.num, 100, (self.buttons_long, self.buttons_wide), border = 10, texts = self.ship_button_txt,
                                             onClicks = self.ship_button_fn_list)
-        self.exit_button = Button(button_surf, self.resx - 50, 0, 50, 50, text = "X", onClick = lambda: quit())
-        self.next_screen = Button(button_surf, self.resx - 100, self.resy - 50, 100, 50, text = "Next", onClick = self.build_next_screen)
-        self.reset_board_button = Button(button_surf, 0, self.resy - 50, 100, 50, text = "Reset Board", onClick = self.reset_board)
+        self.exit_button = Button(button_surf, globals.resx[0] - 50, 0, 50, 50, text = "X", onClick = lambda: quit())
+        self.next_screen = Button(button_surf, globals.resx[0] - 100, globals.resy[0] - 50, 100, 50, text = "Next", onClick = self.build_next_screen)
+        self.reset_board_button = Button(button_surf, 0, globals.resy[0] - 50, 100, 50, text = "Reset Board", onClick = self.reset_board)
         return button_surf
     
     def change_selected(self, num):
@@ -139,20 +137,20 @@ class ShipPlacementScreen(UII):
         return board
 
 
-    def draw_selector(self, screen, ship, x, y):
+    def draw_selector(self, ship, x, y):
         if ship != None:
             rect = (self.board_pos[0] + x * self.tile_size, self.board_pos[1] + y * self.tile_size, self.tile_size, self.tile_size)
-            pygame.draw.rect(screen, (255, 0, 0, 50), rect, 2)
+            pygame.draw.rect(globals.surface[0], (255, 0, 0, 50), rect, 2)
     
-    def add_instructions(self, screen):
+    def add_instructions(self):
         s = self.font.render("Click a button at the bottom", True, pygame.Color("black"))
-        pos = pygame.Rect((self.resx / 2) - 200, self.board_pos[1] - 100, 400, 100)
-        screen.blit(s, s.get_rect(center = pos.center))
+        pos = pygame.Rect((globals.resx[0] / 2) - 200, self.board_pos[1] - 100, 400, 100)
+        globals.surface[0].blit(s, s.get_rect(center = pos.center))
     
-    def add_click_instructions(self, screen):
+    def add_click_instructions(self):
         s = self.font.render("Now click on a square to place your ship", True, pygame.Color("black"))
-        pos = pygame.Rect((self.resx / 2) - 200, self.board_pos[1] - 100, 400, 100)
-        screen.blit(s, s.get_rect(center = pos.center))
+        pos = pygame.Rect((globals.resx[0] / 2) - 200, self.board_pos[1] - 100, 400, 100)
+        globals.surface[0].blit(s, s.get_rect(center = pos.center))
 
     def build_next_screen(self):
         ship_totals = [0 for i in range(len(self.board.ship_list))]
@@ -216,10 +214,10 @@ class ShipPlacementScreen(UII):
             globals.surface[0].blit(s, (0, 0))
             
             if self.selected_ship != None:
-                self.draw_selector(globals.surface[0], ship, x, y)
-                self.add_click_instructions(globals.surface[0])
+                self.draw_selector(ship, x, y)
+                self.add_click_instructions()
             else:
-                self.add_instructions(globals.surface[0])
+                self.add_instructions()
             if self.isBoard2:
                 self.draw_ship(self.board.board2)
             else:
@@ -228,7 +226,7 @@ class ShipPlacementScreen(UII):
             pygame.display.update()
 
             pygame.display.flip()
-            self.clock.tick(60)
+            self.clock.tick(0)
             self.selected_square = None
             if len(globals.rematch) == 1 or len(globals.return_to_login) == 1:
                 return

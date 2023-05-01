@@ -13,18 +13,17 @@ class GameplayScreen(UII):
         super().__init__()
         self.board = board
         self.clock = pygame.time.Clock()
-        self.resx, self.resy = globals.surface[0].get_size()
         self.border = 50
         self.num = self.board.size
         self.tile_size = self.calculate_tile_size()
-        self.board1pos = [(self.resx / 4) - self.tile_size * (self.num / 2), (self.resy / 2) - self.tile_size * (self.num / 2)]
-        self.board2pos = [(self.resx / 4 * 3) - self.tile_size * (self.num/2), (self.resy / 2) - self.tile_size * (self.num / 2)]
+        self.board1pos = [(globals.resx[0] / 4) - self.tile_size * (self.num / 2), (globals.resy[0] / 2) - self.tile_size * (self.num / 2)]
+        self.board2pos = [(globals.resx[0] / 4 * 3) - self.tile_size * (self.num/2), (globals.resy[0] / 2) - self.tile_size * (self.num / 2)]
         self.titleFont = pygame.font.SysFont("", 60)
         self.font = pygame.font.SysFont("", 32)
         self.selected_square = None
         self.board1_surf = self.create_board_surf()
         self.board2_surf = self.create_board_surf()
-        self.standing_ships = self.num
+        self.standing_ships = tuple(self.board.ship_list)
         self.is_end = False
         if globals.account2[0].user == "Computer":
             globals.services[0].isPVP = False
@@ -35,7 +34,7 @@ class GameplayScreen(UII):
 
 
     def calculate_tile_size(self):
-        tSize = (self.resx / 2 - self.border * 2 - 100) / self.num
+        tSize = (globals.resx[0] / 2 - self.border * 2 - 100) / self.num
         if tSize > 70:
             return 70
         else:
@@ -99,9 +98,9 @@ class GameplayScreen(UII):
                 self.draw_ships(self.board.board2)
                 self.draw_hits()
 
-            self.fire_button = Button(globals.surface[0], self.resx - 100, self.resy - 50, 100, 50, text = "FIRE", onClick = self.fire)
-            self.reset_shots = Button(globals.surface[0], 0, self.resy - 50, 100, 50, text = "reset shots", onClick = self.reset_shot)
-            self.pause_button = Button(globals.surface[0], self.resx - 50, 0, 50, 50, text = "||", onClick = self.build_pause_screen)
+            self.fire_button = Button(globals.surface[0], globals.resx[0] - 100, globals.resy[0] - 50, 100, 50, text = "FIRE", onClick = self.fire)
+            self.reset_shots = Button(globals.surface[0], 0, globals.resy[0] - 50, 100, 50, text = "reset shots", onClick = self.reset_shot)
+            self.pause_button = Button(globals.surface[0], globals.resx[0] - 50, 0, 50, 50, text = "||", onClick = self.build_pause_screen)
 
             if self.is_end:
                 self.build_endgame_screen()
@@ -110,7 +109,7 @@ class GameplayScreen(UII):
             pygame.display.update()
 
             pygame.display.flip()
-            self.clock.tick(15)
+            self.clock.tick(0)
             self.selected_square = None
             if len(globals.rematch) == 1 or len(globals.return_to_login) == 1:
                 return
@@ -120,12 +119,12 @@ class GameplayScreen(UII):
             s = self.titleFont.render("Player 1 " + globals.account1[0].user, True, pygame.Color("black"))
         else:
             s = self.titleFont.render("Player 2 " + globals.account2[0].user, True, pygame.Color("black"))
-        globals.surface[0].blit(s, (self.resx / 2 - 100, self.resy / 2 - self.tile_size * (self.num / 2) - 50))
+        globals.surface[0].blit(s, (globals.resx[0] / 2 - 100, globals.resy[0] / 2 - self.tile_size * (self.num / 2) - 50))
         for x in range(self.num):
             for y in range(self.num):
                 if board[y][x] != 0:
-                    s1 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("black"))
-                    s2 = self.font.render("s" + str(board[y][x] + 1), True, pygame.Color("darkgrey"))
+                    s1 = self.font.render("s" + str(board[y][x]), True, pygame.Color("black"))
+                    s2 = self.font.render("s" + str(board[y][x]), True, pygame.Color("darkgrey"))
                     pos = pygame.Rect(self.board1pos[0] + x * self.tile_size+1, self.board1pos[1] + y * self.tile_size + 1, self.tile_size, self.tile_size)
                     globals.surface[0].blit(s2, s2.get_rect(center = pos.center).move(1, 1))
                     globals.surface[0].blit(s1, s1.get_rect(center = pos.center))
@@ -210,7 +209,10 @@ class GameplayScreen(UII):
             self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
             while hit and self.board.chain:
                 self.board.shotBoard2, self.board.board1, hit, self.is_end = globals.services[3].fire(self.board.board1, self.board.board2, self.board.shotBoard2, self.num, self.board.salvo)
-            globals.services[2].isPlayer1 = True
+            if self.is_end:
+                globals.services[2].isPlayer1 = False
+            else:
+                globals.services[2].isPlayer1 = True
 
     def reset_shot(self):
         if globals.services[2].isPlayer1:
@@ -227,12 +229,18 @@ class GameplayScreen(UII):
         self.pause_screen.add_elements()
     
     def build_endgame_screen(self):
-        if globals.services[2].isPlayer1:
+        if globals.services[2].isPlayer1 and globals.services[0].isPVP and not self.board.chain:
             globals.services[0].recordWin(globals.account2[0].key)
             globals.services[0].recordLoss(globals.account1[0].key)
-        else:
+        elif not globals.services[2].isPlayer1 and globals.services[0].isPVP and not self.board.chain:
             globals.services[0].recordWin(globals.account1[0].key)
             globals.services[0].recordLoss(globals.account2[0].key)
+        elif globals.services[2].isPlayer1 and (not globals.services[0].isPVP or self.board.chain):
+            globals.services[0].recordWin(globals.account1[0].key)
+            globals.services[0].recordLoss(globals.account2[0].key)
+        elif not globals.services[2].isPlayer1 and (not globals.services[0].isPVP or self.board.chain):
+            globals.services[0].recordWin(globals.account2[0].key)
+            globals.services[0].recordLoss(globals.account1[0].key)
 
         self.endgame_screen = EndgameScreen()
         self.endgame_screen.add_elements()

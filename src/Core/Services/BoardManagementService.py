@@ -6,7 +6,6 @@ class BoardManagementService(BMSI):
         self.board = None
     
     def generate_board(self, size, ship5, ship4, ship3, ship2, salvo = False, chain = False):
-        globals.rules.append([size, ship5, ship4, ship3, ship2, salvo, chain])
         self.board = Board(size, ship5, ship4, ship3, ship2, salvo, chain)
         return self.board
     
